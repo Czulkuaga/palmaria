@@ -1,6 +1,7 @@
 const ApiService = {}
 
-const SERVER = `http://localhost:4000`
+// const SERVER = `http://localhost:4000`
+const SERVER = `https://palmaria-bkn.conextec.com.co`
 
 ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, matricula) => {
     let formData ={
