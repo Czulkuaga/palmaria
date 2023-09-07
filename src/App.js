@@ -64,7 +64,7 @@ function App() {
 
     if (formData.matricula === "") newErrors.matricula = 'Debes indicar la matricula del terreno para poder realizar la consulta.';
     if (formData.metros === "") newErrors.metros = 'Debes especificar la cantidad de metros a consultar.';
-    if (formData.acept === false) newErrors.acept = 'Si debes continuar, acepta los términos y condiciones del sitio.';
+    // if (formData.acept === false) newErrors.acept = 'Si debes continuar, acepta los términos y condiciones del sitio.';
 
     if (formData.matricula !== "") {
       let isValidNumContact = formData.matricula.match(validarMatricula)
@@ -95,11 +95,15 @@ function App() {
     try {
       const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData.matricula)
       // console.log(obtainCBL)
-      if (obtainCBL.code !== '200') {
+      if (obtainCBL.data.cbml === "null") {
         setLoad(false)
         setFormData(defaultData)
+        // restartForm()
+        setFeatures([])
+        setFormData({matricula:"", metros:""})
         return
       }
+      // console.log(features.length)
       const obtainPOT48Data = await ApiService.obtainPOT48Data(obtainCBL.data.cbml)
       // console.log(obtainPOT48Data)
       if (obtainPOT48Data.code !== '200') {
@@ -122,8 +126,10 @@ function App() {
       // console.log(obtainM2value)
 
       setFeatures(obtainM2value.data.features)
+      // setFormData({matricula:"", metros:""})
       // setDir(obtainCBL.data.direccion)
       setLoad(false)
+      // restartForm()
     } catch (error) {
       setLoad(false)
       console.log(error)
@@ -131,11 +137,11 @@ function App() {
     }
   }
 
-  const restartForm = () => {
-    setFormData({matricula:"", metros:""})
-    // setDir(null)
-    setFeatures([])
-  }
+  // const restartForm = () => {
+  //   // setDir(null)
+  //   setFeatures([])
+  //   setFormData({matricula:"", metros:""})
+  // }
 
   return (
     <>
@@ -203,46 +209,57 @@ function App() {
       {/* Navbar End */}
 
       {/* Quote Start */}
-      <div className="row bg-simulador">
-        <div className="container-xxl py-5 ">
+      <div className=" bg-simulador">
+        <div className="container-xxl pt-3 pb-3 ">
           <div className="container">
+
             <div className="row g-5">
 
-              <div className="col-lg-6 wow fadeInUp pt-5" data-wow-delay="0.5s">
+        
+
+
+              <div className="col-lg-7 wow fadeInUp pt-5" data-wow-delay="0.5s">
                 <h2 className="title-simulador  mb-4 ">Simulador de pago para obligaciones urbanísticas </h2>
 
-                <p className="descrip-simulador mb-5">Aquì podrás conocer en detalle la informaciòn correspondiente para tus obligaciones urbanisticas pendientes con el municipio de medellìn.</p>
+                <p className="descrip-simulador mb-4">Aquì podrás conocer en detalle la informaciòn correspondiente para tus obligaciones urbanisticas pendientes con el municipio de medellìn.</p>
+                <div className="container">
+
                 <div className="row g-3">
 
-                  <form ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
-                    <div className="mb-3">
-                      <label htmlFor="NumMatricula" className="form-label">Número de matricula</label>
+                  <form className='form-display' ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
+                    <div className="col-sm-6 col-12 mb-4 mt-4 pe-0 pe-md-3">
+                       <div className="form-floating">
+                     
                       <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
+                      <label htmlFor="NumMatricula" className="form-label ">Número de matricula</label>
                       {
-                        errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text">Por favor escriba el número de matricula, sólo se permiten caracteres numéricos.</div>
+                        errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
                       }
 
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <label htmlFor="Metros" className="form-label">Cantidad de metros cuadrados</label>
+                    <div className="col-sm-6 col-12 mt-4 mb-4">
+                       <div className="form-floating">
                       <input name={"metros"} value={formData.metros} type="number" className="form-control" id="Metros" aria-describedby="metrosHelp" onChange={(e) => inputChangeHandler(e)} />
+                      <label htmlFor="Metros" className="form-label">Metros cuadrados del lote</label>
                       {
-                        errors.metros ? <div id="metrosHelp" className="form-text text-danger">{errors.metros}</div> : <div id="metrosHelp" className="form-text">Por favor indique la cantidad de metros cuadrados por los que desea consultar.</div>
+                        errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
                       }
+                    </div> 
                     </div>
-                    <div className="mb-3 form-check">
-                      <input name={"acept"} type="checkbox" className="form-check-input" id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
-                      <label className="form-check-label" htmlFor="exampleCheck1">Acepta los términos y condiciones</label>
+                    {/* <div className="col-12 mb-5 form-check text-start text-white">
+                      <input name={"acept"} type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
+                      <label className="form-check-label text-start" htmlFor="exampleCheck1">Acepta los términos y condiciones</label>
                       {
-                        errors.acept && <div id="metrosHelp" className="form-text text-danger">{errors.acept}</div>
+                        errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
                       }
-                    </div>
+                    </div> */}
                     {
                       load ? <>
                       <Sipinner />
                       </>:
                       <>
-                        <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button>
+                        {/* <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button> */}
                         <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button> 
                       </>
                     }
@@ -269,14 +286,14 @@ function App() {
                     <a className="btn  btn-warning rounded-pill py-3 px-5" href="/">Calcular</a>
                   </div> */}
 
-
+                </div>
                 </div>
               </div>
 
-              <div className="col-lg-6 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
+              <div className="col-lg-5 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
                 <picture className="second animated fadeInUp">
-                  <source media="(min-width: 767px)" srcSet="img/img-simulador-1.png" />
-                  <img src="img/img-simulador-1.png" alt="" />
+                  <source media="(min-width: 767px)" srcSet="img/img-simulador-3.png" />
+                  <img src="img/img-simulador-3.png" alt="" />
                 </picture>
               </div>
             </div>
@@ -289,12 +306,12 @@ function App() {
       {/* simulador Start */}
       {
         features.length > 0 && features.map((feature, index) => (
-          <div className="row mb-5 pb-5" key={index}>
+          <div className="row mb-5 pb-5 margin-calculo" key={index}>
             <div className="container-xxl mt-n5">
               <div className="container z-index-sec">
                 <div className="row g-0 feature-row">
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                    <div className="feature-item border h-100 px-3 py-4 ">
+                    <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                         <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
                       </div>
@@ -311,19 +328,19 @@ function App() {
                   </div>
 
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                    <div className="feature-item border h-100 px-3 py-4 ">
+                    <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                         <img className="img-fluid" src="img/icon/icon-simulador-2.svg" alt="Icon" />
                       </div>
-                      <h5 className="mb-3 text-center title-detalle text-warning">Si pagas en efectivo</h5>
+                      <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
                         <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2 * parseInt(formData.metros))}</strong></span></li>
-                        <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong>+15%</strong></span></li>
-                        <li className="list-group-item">Total recargo en efectivo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
+                        <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
+                        <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
 
 
                       </ul>
-                      <div className="cont-valor-simulador bg-warning">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</span> </div>
+                      <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</span> </div>
                     </div>
                   </div>
 
@@ -332,12 +349,12 @@ function App() {
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                         <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
                       </div>
-                      <h5 className="mb-3 text-center title-detalle text-green">Pago con Palmaria</h5>
+                      <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
                         <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
-                        <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-danger">-15%</strong></span></li>
-                        <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-danger">-15%</strong></span></li>
-                        <li className="list-group-item">Total ahorro en efectivo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
+                        <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                        <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                        <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
                       </ul>
                       <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15)) - ((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15)))}</span> </div>
                     </div>
