@@ -186,7 +186,6 @@ function App() {
                 <a href="index.html" className="nav-item nav-link active">Obligaciones Urbanísticas</a>
                 <a href="about.html" className="nav-item nav-link">Nosotros</a>
 
-
                 <div className="nav-item dropdown">
                   <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
                   <div className="dropdown-menu bg-light rounded-0 rounded-bottom m-0">
@@ -210,13 +209,10 @@ function App() {
 
       {/* Quote Start */}
       <div className=" bg-simulador">
-        <div className="container-xxl pt-3 pb-3 ">
+        <div className="container-xxl pt-3">
           <div className="container">
 
             <div className="row g-5">
-
-        
-
 
               <div className="col-lg-7 wow fadeInUp pt-5" data-wow-delay="0.5s">
                 <h2 className="title-simulador  mb-4 ">Simulador de pago para obligaciones urbanísticas </h2>
