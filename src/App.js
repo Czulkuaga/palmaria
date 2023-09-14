@@ -23,9 +23,11 @@ function App() {
 
   const fetchPOT = React.useRef(null)
 
+  // console.log(features.length)
+
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
-  const validarMetros = /^[0-9]{1,6}$/g
+  const validarMetros = /^\d+(?:[.]\d+)?$/g
 
   function addDotThousands(numero) {
     // Convertir el número a una cadena de texto
@@ -34,19 +36,28 @@ function App() {
     // Separar la parte entera de la parte decimal (si existe)
     let partes = numeroString.split('.');
     let parteEntera = partes[0];
-    let parteDecimal = partes.length > 1 ? ',' + partes[1] : '';
+    let parteDecimal = partes.length > 1 ? '.' + partes[1] : '';
 
     // Agregar los puntos de mil a la parte entera
-    parteEntera = parteEntera.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    parteEntera = parteEntera.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     // Devolver el número con los puntos de mil agregados
     return parteEntera + parteDecimal;
   }
 
+  // const convertDotsForComa = (numero) => {
+  //    // Convertir el número a una cadena de texto
+  //    let numeroString = numero.toString();
+  //    numeroString.replace(',','.')
+
+  //    let numType = parseFloat(numeroString)
+  //    return numType
+  // }
+
   const inputChangeHandler = e => {
     setErrors({})
     const target = e.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === 'checkbox' ? target.checked : target.value.replace(',', '.');
     const name = target.name;
 
     setFormData(formData => {
@@ -76,7 +87,7 @@ function App() {
     if (formData.matricula !== "") {
       let isValidNumContact = formData.metros.match(validarMetros)
       if (!isValidNumContact) {
-        newErrors.metros = 'Los metros del terreno deben estar compuestos por números y no deben tener más de 6 caracteres.';
+        newErrors.metros = 'Los metros del terreno deben estar compuestos por números y no deben tener más de 6 caracteres, además deben contener decimales.';
       }
     }
 
@@ -92,6 +103,11 @@ function App() {
   }
 
   const postData = async (formData) => {
+    // setFormData({
+    //   matricula: formData.matricula,
+    //   metros: convertDotsForComa(formData.metros),
+    //   acept: formData.acept
+    // })
     try {
       const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData.matricula)
       // console.log(obtainCBL)
@@ -100,7 +116,7 @@ function App() {
         setFormData(defaultData)
         // restartForm()
         setFeatures([])
-        setFormData({matricula:"", metros:""})
+        setFormData({ matricula: "", metros: "" })
         return
       }
       // console.log(features.length)
@@ -186,6 +202,7 @@ function App() {
                 <a href="index.html" className="nav-item nav-link active">Obligaciones Urbanísticas</a>
                 <a href="about.html" className="nav-item nav-link">Nosotros</a>
 
+
                 <div className="nav-item dropdown">
                   <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
                   <div className="dropdown-menu bg-light rounded-0 rounded-bottom m-0">
@@ -217,53 +234,53 @@ function App() {
               <div className="col-lg-7 wow fadeInUp pt-5" data-wow-delay="0.5s">
                 <h2 className="title-simulador  mb-4 ">Simulador de pago para obligaciones urbanísticas </h2>
 
-                <p className="descrip-simulador mb-4">Aquì podrás conocer en detalle la informaciòn correspondiente para tus obligaciones urbanisticas pendientes con el municipio de medellìn.</p>
+                <p className="descrip-simulador mb-4">Aquí podrás conocer en detalle la informaciòn correspondiente para tus obligaciones urbanisticas pendientes con el municipio de medellìn.</p>
                 <div className="container">
 
-                <div className="row g-3">
+                  <div className="row g-3">
 
-                  <form className='form-display' ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
-                    <div className="col-sm-6 col-12 mb-4 mt-4 pe-0 pe-md-3">
-                       <div className="form-floating">
-                     
-                      <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
-                      <label htmlFor="NumMatricula" className="form-label ">Número de matricula</label>
-                      {
-                        errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
-                      }
+                    <form className='form-display' ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
+                      <div className="col-sm-6 col-12 mb-4 mt-4 pe-0 pe-md-3">
+                        <div className="form-floating">
 
+                          <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
+                          <label htmlFor="NumMatricula" className="form-label ">Número de matricula</label>
+                          {
+                            errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
+                          }
+
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-sm-6 col-12 mt-4 mb-4">
-                       <div className="form-floating">
-                      <input name={"metros"} value={formData.metros} type="number" className="form-control" id="Metros" aria-describedby="metrosHelp" onChange={(e) => inputChangeHandler(e)} />
-                      <label htmlFor="Metros" className="form-label">Metros cuadrados del lote</label>
-                      {
-                        errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
-                      }
-                    </div> 
-                    </div>
-                    {/* <div className="col-12 mb-5 form-check text-start text-white">
+                      <div className="col-sm-6 col-12 mt-4 mb-4">
+                        <div className="form-floating">
+                          <input name={"metros"} value={formData.metros} type="string" className="form-control" id="Metros" aria-describedby="metrosHelp" onChange={(e) => inputChangeHandler(e)} />
+                          <label htmlFor="Metros" className="form-label">Metros cuadrados del lote</label>
+                          {
+                            errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
+                          }
+                        </div>
+                      </div>
+                      {/* <div className="col-12 mb-5 form-check text-start text-white">
                       <input name={"acept"} type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
                       <label className="form-check-label text-start" htmlFor="exampleCheck1">Acepta los términos y condiciones</label>
                       {
                         errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
                       }
                     </div> */}
-                    {
-                      load ? <>
-                      <Sipinner />
-                      </>:
-                      <>
-                        {/* <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button> */}
-                        <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button> 
-                      </>
-                    }
-                  </form>
+                      {
+                        load ? <>
+                          <Sipinner />
+                        </> :
+                          <>
+                            {/* <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button> */}
+                            <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button>
+                          </>
+                      }
+                    </form>
 
 
 
-                  {/* <div className="col-sm-6 mb-4">
+                    {/* <div className="col-sm-6 mb-4">
                     <div className="form-floating">
                       <input type="text" className="form-control" id="Matricula" placeholder="Your Name" />
                       <label htmlFor="number"> Numero de matrícula</label>
@@ -282,7 +299,7 @@ function App() {
                     <a className="btn  btn-warning rounded-pill py-3 px-5" href="/">Calcular</a>
                   </div> */}
 
-                </div>
+                  </div>
                 </div>
               </div>
 
@@ -301,65 +318,86 @@ function App() {
 
       {/* simulador Start */}
       {
-        features.length > 0 && features.map((feature, index) => (
-          <div className="row mb-5 pb-5 margin-calculo" key={index}>
-            <div className="container-xxl mt-n5">
-              <div className="container z-index-sec">
-                <div className="row g-0 feature-row">
-                  <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                    <div className="feature-item-1 border h-100 px-3 py-4 ">
-                      <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+        features.length > 0 ?
+          (
+            features.length < 2 ?
+              (
+                <>
+                  {
+                    features.map((feature, index) => (
+                      <div className="row mb-5 pb-5 margin-calculo" key={index}>
+                        <div className="container-xxl mt-n5">
+                          <div className="container z-index-sec">
+                            <div className="row g-0 feature-row">
+                              <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                                <div className="feature-item-1 border h-100 px-3 py-4 ">
+                                  <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                                    <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                                  </div>
+                                  <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
+                                  <ul className="list-group list-group-flush list-simulador mb-4">
+                                    <li className="list-group-item">Comuna <span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                                    <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{cbml}*</strong></span></li>
+                                    <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                                    <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+
+                                  </ul>
+                                  <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</span> </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                                <div className="feature-item-1 border h-100 px-3 py-4 ">
+                                  <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                                    <img className="img-fluid" src="img/icon/icon-simulador-2.svg" alt="Icon" />
+                                  </div>
+                                  <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
+                                  <ul className="list-group list-group-flush list-simulador mb-4">
+                                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
+                                    <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+
+
+                                  </ul>
+                                  <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</span> </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                                <div className="feature-item border h-100 px-3 py-4 ">
+                                  <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                                    <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                                  </div>
+                                  <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
+                                  <ul className="list-group list-group-flush list-simulador mb-4">
+                                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                                    <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                                    <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                                    <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                                  </ul>
+                                  <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</span> </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
-                      <ul className="list-group list-group-flush list-simulador mb-4">
-                        <li className="list-group-item">Comuna <span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                        <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{cbml}*</strong></span></li>
-                        <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                        <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
-
-                      </ul>
-                      <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(feature.attributes.VALOR_M2 * parseInt(formData.metros))}</span> </div>
-                    </div>
+                    ))
+                  }
+                </>
+              ) :
+              (
+                <>
+                  <div className='mt-5'>
+                    <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nostros.</h5>
                   </div>
-
-                  <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                    <div className="feature-item-1 border h-100 px-3 py-4 ">
-                      <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-2.svg" alt="Icon" />
-                      </div>
-                      <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
-                      <ul className="list-group list-group-flush list-simulador mb-4">
-                        <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2 * parseInt(formData.metros))}</strong></span></li>
-                        <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
-                        <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
-
-
-                      </ul>
-                      <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</span> </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                    <div className="feature-item border h-100 px-3 py-4 ">
-                      <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
-                      </div>
-                      <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
-                      <ul className="list-group list-group-flush list-simulador mb-4">
-                        <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
-                        <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                        <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                        <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15))}</strong></span></li>
-                      </ul>
-                      <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(((feature.attributes.VALOR_M2 * parseInt(formData.metros)) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15)) - ((feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15) + (feature.attributes.VALOR_M2 * parseInt(formData.metros)*0.15)))}</span> </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
+                </>
+              )
+          ) :
+          (
+            <>
+            </>
+          )
       }
       {/* simulador End */}
 
