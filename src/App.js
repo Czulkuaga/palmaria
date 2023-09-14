@@ -389,7 +389,7 @@ function App() {
               (
                 <>
                   <div className='mt-5'>
-                    <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nostros.</h5>
+                    <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nosotros.</h5>
                   </div>
                 </>
               )
