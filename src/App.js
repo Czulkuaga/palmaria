@@ -161,8 +161,8 @@ function App() {
 
   return (
     <>
-      <header>
-        {/* Topbar Start */}
+      {/* <header>
+
         <div className="container-fluid bg-menu-top text-white d-none d-lg-flex">
           <div className="container py-3">
             <div className="d-flex align-items-center">
@@ -183,13 +183,13 @@ function App() {
             </div>
           </div>
         </div>
-        {/* Topbar End */}
-      </header>
 
-      {/* <CardInfo /> */}
+      </header> */}
+
+
 
       {/* Navbar Start */}
-      <div className="container-fluid bg-menu sticky-top">
+      {/* <div className="container-fluid bg-menu sticky-top">
         <div className="container">
           <nav className="navbar navbar-expand-lg bg-menu navbar-light p-lg-0">
 
@@ -221,7 +221,7 @@ function App() {
             </div>
           </nav>
         </div>
-      </div>
+      </div> */}
       {/* Navbar End */}
 
       {/* Quote Start */}
@@ -389,7 +389,7 @@ function App() {
               (
                 <>
                   <div className='mt-5'>
-                    <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nosotros.</h5>
+                    <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nostros.</h5>
                   </div>
                 </>
               )
@@ -402,7 +402,7 @@ function App() {
       {/* simulador End */}
 
       {/* Footer Start */}
-      <div className="container-fluid bg-dark footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
+      {/* <div className="container-fluid bg-dark footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
         <div className="container py-5">
           <div className="row g-5">
             <div className="col-lg-3 col-md-6">
@@ -444,11 +444,11 @@ function App() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Footer End */}
 
       {/* Copyright Start */}
-      <div className="container-fluid copyright py-4">
+      {/* <div className="container-fluid copyright py-4">
         <div className="container">
           <div className="row">
             <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
@@ -459,11 +459,11 @@ function App() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Copyright End */}
 
       {/* Back to Top */}
-      <a href="/" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a>
+      {/* <a href="/" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a> */}
     </>
   );
 }
