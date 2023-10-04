@@ -6,6 +6,9 @@ import Sipinner from './Components/Sipinner'
 import ApiService from './Service/ApiService'
 
 const defaultData = {
+  fullname:"",
+  email:"",
+  phone:"",
   matricula: "",
   metros: "",
   acept: false
@@ -75,6 +78,9 @@ function App() {
 
     if (formData.matricula === "") newErrors.matricula = 'Debes indicar la matricula del terreno para poder realizar la consulta.';
     if (formData.metros === "") newErrors.metros = 'Debes especificar la cantidad de metros a consultar.';
+    if (formData.fullname === "") newErrors.fullname = 'El nombre completo es requerido.';
+    if (formData.email === "") newErrors.email = 'El correo electrónico es requerido.';
+    if (formData.phone === "") newErrors.phone = 'El número de celular es requerido.';
     // if (formData.acept === false) newErrors.acept = 'Si debes continuar, acepta los términos y condiciones del sitio.';
 
     if (formData.matricula !== "") {
@@ -245,21 +251,30 @@ function App() {
 
                         <div class="col-sm-4 mb-4 mb-md-5 ">
                           <div class="form-floating">
-                            <input type="text" class="form-control" id="fullname" name='fullname' />
+                            <input name={"fullname"} value={formData.fullname} type="text" className="form-control" id="fullname" aria-describedby="fullname" onChange={(e) => inputChangeHandler(e)} />
                             <label for="fullname"> Nombre y apellidos*</label>
+                            {
+                              errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"> Nombre completo.</div>
+                            }
                           </div>
                         </div>
 
                         <div class="col-sm-4 mb-4 mb-md-5 ">
                           <div class="form-floating">
-                            <input type="text" class="form-control" id="email" name='email' />
+                            <input name={"email"} value={formData.email} type="text" className="form-control" id="email" aria-describedby="email" onChange={(e) => inputChangeHandler(e)} />
                             <label for="email"> Correo electronico*</label>
+                            {
+                              errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> Correo Electrónico.</div>
+                            }
                           </div>
                         </div>
                         <div class="col-sm-4 mb-4 mb-md-5 ">
                           <div class="form-floating">
-                            <input type="text" class="form-control" id="phone" name='phone' />
+                            <input name={"phone"} value={formData.phone} type="number" className="form-control" id="phone" aria-describedby="phone" onChange={(e) => inputChangeHandler(e)} />
                             <label for="phone">Número Celular*</label>
+                            {
+                              errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> Número Celular.</div>
+                            }
                           </div>
                         </div>
 
