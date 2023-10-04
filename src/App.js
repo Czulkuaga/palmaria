@@ -240,7 +240,59 @@ function App() {
                   <div className="row g-3">
 
                     <form className='form-display' ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
-                      <div className="col-sm-6 col-12 mb-4 mt-4 pe-0 pe-md-3">
+
+                      <div class="row g-3">
+
+                        <div class="col-sm-4 mb-4 mb-md-5 ">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="fullname" name='fullname' />
+                            <label for="fullname"> Nombre y apellidos*</label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-4 mb-4 mb-md-5 ">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="email" name='email' />
+                            <label for="email"> Correo electronico*</label>
+                          </div>
+                        </div>
+                        <div class="col-sm-4 mb-4 mb-md-5 ">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="phone" name='phone' />
+                            <label for="phone">Número Celular*</label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6 mb-md-1 mb-4">
+                          <div class="form-floating">
+                            <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
+                            <label for="NumMatricula"> Número de matricula</label>
+                            {
+                              errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
+                            }
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6 mb-md-1 mb-4">
+                          <div class="form-floating">
+                            <input name={"metros"} value={formData.metros} type="string" className="form-control" id="Metros" aria-describedby="metrosHelp" onChange={(e) => inputChangeHandler(e)} />
+                            <label for="Metros">M2 del lote</label>
+                            {
+                              errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
+                            }
+                          </div>
+                        </div>
+
+                        <div class="mb-3 form-check ms-2 text-start text-white">
+                          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+                          <label class="form-check-label" for="exampleCheck1">He leído y acepto los términos y condiciones de uso</label>
+                          {
+                            errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
+                          }
+                        </div>
+
+
+                        {/* <div className="col-sm-6 col-12 mb-4 mt-4 pe-0 pe-md-3">
                         <div className="form-floating">
 
                           <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
@@ -259,23 +311,28 @@ function App() {
                             errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
                           }
                         </div>
-                      </div>
-                      {/* <div className="col-12 mb-5 form-check text-start text-white">
+                      </div> */}
+
+
+                        {/* <div className="col-12 mb-5 form-check text-start text-white">
                       <input name={"acept"} type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
                       <label className="form-check-label text-start" htmlFor="exampleCheck1">Acepta los términos y condiciones</label>
                       {
                         errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
                       }
                     </div> */}
-                      {
-                        load ? <>
-                          <Sipinner />
-                        </> :
-                          <>
-                            {/* <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button> */}
-                            <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button>
-                          </>
-                      }
+                        {
+                          load ? <>
+                            <Sipinner />
+                          </> :
+                            <>
+                              {/* <button type='button' style={{marginRight:'20px'}} className="btn btn-info rounded-pill py-3 px-5" onClick={() => restartForm()}>Reiniciar</button> */}
+                              <div class="col-3 p-0 mb-5">
+                                <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button>
+                              </div>
+                            </>
+                        }
+                      </div>
                     </form>
 
 
