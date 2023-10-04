@@ -377,8 +377,8 @@ function App() {
 
               <div className="col-lg-5 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
                 <picture className="second animated fadeInUp">
-                  <source media="(min-width: 767px)" srcSet="http://68.183.129.121/wp-content/uploads/2023/09/img-simulador-2.png" />
-                  <img src="http://68.183.129.121/wp-content/uploads/2023/09/img-simulador-2.png" alt="" />
+                  <source media="(min-width: 767px)" srcSet="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" />
+                  <img src="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" alt="" />
                 </picture>
               </div>
             </div>
