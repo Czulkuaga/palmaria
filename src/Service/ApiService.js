@@ -1,7 +1,7 @@
 const ApiService = {}
 
-// const SERVER = `http://localhost:4000`
-const SERVER = `https://palmaria-bkn.conextec.com.co`
+const SERVER = `http://localhost:4000`
+// const SERVER = `https://palmaria-bkn.conextec.com.co`
 
 ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, matricula) => {
     let formData ={
@@ -16,7 +16,9 @@ ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, matricula) => {
         },
         body: JSON.stringify(formData)
     })
+
     // console.log(obtaintCBL)
+
     if(!obtaintCBL.ok){
         let response = {
             code: '500',
@@ -30,6 +32,9 @@ ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, matricula) => {
         msg: data.msg,
         data: data.data
     }
+
+    // console.log(response)
+
     return response
 }
 
