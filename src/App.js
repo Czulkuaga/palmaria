@@ -340,7 +340,7 @@ function App() {
       {
         features.length === 0 && (
 
-          <div className="row mb-5 pb-5 margin-calculo">
+          <div className="mb-5 pb-5 margin-calculo">
             <div className="container-xxl">
               <div className="container z-index-sec">
                 <div className="row g-0 feature-row">
