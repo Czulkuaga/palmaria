@@ -347,7 +347,7 @@ function App() {
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
@@ -364,7 +364,7 @@ function App() {
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-2.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
@@ -381,7 +381,7 @@ function App() {
                   <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
