@@ -928,12 +928,11 @@ display: flex;
 
 
 .bg-simulador{
-
-display: flex;
+  display: flex;
   margin-top: -80px;
   width: auto;
   min-height: 583px;
-  background-image: linear-gradient(269deg, #0074D3 0%, #0174D2 31%, #0040A8 100%);
+  background-image: linear-gradient(81deg,#0d3c5e,#002946 31%,#1052a9);
   text-align: center;
   overflow: hidden;
   padding-top: 110px;

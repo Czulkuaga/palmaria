@@ -237,10 +237,10 @@ function App() {
 
             <div className="row g-5">
 
-              <div className="col-lg-7 wow fadeInUp pt-5" data-wow-delay="0.5s">
+              <div className="col-lg-8 wow fadeInUp pt-5" data-wow-delay="0.5s">
                 <h2 className="title-simulador  mb-4 ">Simulador de pago para obligaciones urbanísticas </h2>
 
-                <p className="descrip-simulador mb-4">Aquí podrás conocer en detalle la informaciòn correspondiente para tus obligaciones urbanisticas pendientes con el municipio de medellìn.</p>
+                <p className="descrip-simulador mb-5">Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
                 <div className="container">
 
                   <div className="row g-3">
@@ -254,7 +254,7 @@ function App() {
                             <input name={"fullname"} value={formData.fullname} type="text" className="form-control" id="fullname" aria-describedby="fullname" onChange={(e) => inputChangeHandler(e)} />
                             <label for="fullname"> Nombre y apellidos*</label>
                             {
-                              errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"> Nombre completo.</div>
+                              errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
                             }
                           </div>
                         </div>
@@ -264,7 +264,7 @@ function App() {
                             <input name={"email"} value={formData.email} type="text" className="form-control" id="email" aria-describedby="email" onChange={(e) => inputChangeHandler(e)} />
                             <label for="email"> Correo electronico*</label>
                             {
-                              errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> Correo Electrónico.</div>
+                              errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
                             }
                           </div>
                         </div>
@@ -273,7 +273,7 @@ function App() {
                             <input name={"phone"} value={formData.phone} type="number" className="form-control" id="phone" aria-describedby="phone" onChange={(e) => inputChangeHandler(e)} />
                             <label for="phone">Número Celular*</label>
                             {
-                              errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> Número Celular.</div>
+                              errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
                             }
                           </div>
                         </div>
@@ -375,10 +375,10 @@ function App() {
                 </div>
               </div>
 
-              <div className="col-lg-5 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
+              <div className="col-lg-4 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
                 <picture className="second animated fadeInUp">
                   <source media="(min-width: 767px)" srcSet="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" />
-                  <img src="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" alt="" />
+                  <img style={{marginTop:'150px', width:'550px'}} src="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" alt="" />
                 </picture>
               </div>
             </div>
