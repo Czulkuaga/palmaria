@@ -4,6 +4,7 @@ import './App.css';
 import React from 'react'
 import Sipinner from './Components/Sipinner'
 import ApiService from './Service/ApiService'
+import ModalInfo from './Components/ModalInfo';
 
 const defaultData = {
   fullname: "",
@@ -17,6 +18,7 @@ const defaultData = {
 const OBTAIN_CBL_API_URL = `https://www.medellin.gov.co/site_consulta_pot/BuscarFichaMat.hyg?buscar=`
 
 function App() {
+
   const [load, setLoad] = React.useState(false)
   const [errors, setErrors] = React.useState({})
   const [formData, setFormData] = React.useState(defaultData)
@@ -31,6 +33,13 @@ function App() {
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
   const validarMetros = /^\d+(?:[.]\d+)?$/g
+
+  const checkboxForm = document.getElementById("exampleCheck1");
+
+  const showmodal = () => {
+    const btnmodal = document.getElementById('btn-showModal')
+    btnmodal.click()
+  }
 
   function addDotThousands(numero) {
     // Convertir el número a una cadena de texto
@@ -122,7 +131,9 @@ function App() {
         setFormData(defaultData)
         // restartForm()
         setFeatures([])
-        setFormData({ matricula: "", metros: "" })
+        setFormData({ fullname:"", email:"", phone:"", matricula: "", metros: "", acept:false })
+        checkboxForm.checked = false
+        showmodal()
         return
       }
       // console.log(features.length)
@@ -536,6 +547,12 @@ function App() {
 
       {/* Back to Top */}
       {/* <a href="/" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a> */}
+
+      <button hidden id='btn-showModal' type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+      </button>
+
+      <ModalInfo message={"No hay datos para mostrar"} />
     </>
   );
 }
