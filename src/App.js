@@ -131,7 +131,7 @@ function App() {
         setFormData(defaultData)
         // restartForm()
         setFeatures([])
-        setFormData({ fullname:"", email:"", phone:"", matricula: "", metros: "", acept:false })
+        setFormData({ matricula: "", metros: "", acept:false })
         checkboxForm.checked = false
         showmodal()
         return
