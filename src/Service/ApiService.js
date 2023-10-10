@@ -3,10 +3,10 @@ const ApiService = {}
 // const SERVER = `http://localhost:4000`
 const SERVER = `https://palmaria-bkn.conextec.com.co`
 
-ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, matricula) => {
+ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, formdata) => {
     let formData ={
         url:OBTAIN_CBL_API_URL,
-        params:matricula
+        data: formdata
     }
 
     const obtaintCBL = await fetch(`${SERVER}/api/cbml/get`,{

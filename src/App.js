@@ -33,6 +33,10 @@ function App() {
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
   const validarMetros = /^\d+(?:[.]\d+)?$/g
+  let validNumber = /^[0-9]{10}$/g
+  let validEmail = /^[A-Za-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[A-Za-z0-9*+/={|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/g
+
+
 
   const checkboxForm = document.getElementById("exampleCheck1");
 
@@ -99,10 +103,24 @@ function App() {
       }
     }
 
-    if (formData.matricula !== "") {
+    if (formData.metros !== "") {
       let isValidNumContact = formData.metros.match(validarMetros)
       if (!isValidNumContact) {
-        newErrors.metros = 'Los metros del terreno deben estar compuestos por números y no deben tener más de 6 caracteres, además deben contener decimales.';
+        newErrors.metros = 'Los metros del terreno deben estar compuestos por números y no deben tener más de 6 caracteres.';
+      }
+    }
+
+    if (formData.phone !== "") {
+      let isValidNumContact = formData.phone.match(validNumber)
+      if (!isValidNumContact) {
+        newErrors.phone = 'Debes ingresar un número de telefono válido, 10 dígitos.';
+      }
+    }
+
+    if (formData.email !== "") {
+      let isValidNumContact = formData.email.match(validEmail)
+      if (!isValidNumContact) {
+        newErrors.email = 'Debes ingresar un correo electrónico válido. El formato es correo@correo.com.';
       }
     }
 
@@ -124,14 +142,14 @@ function App() {
     //   acept: formData.acept
     // })
     try {
-      const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData.matricula)
+      const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData)
       // console.log(obtainCBL)
       if (obtainCBL.data.cbml === "null") {
         setLoad(false)
         setFormData(defaultData)
         // restartForm()
         setFeatures([])
-        setFormData({ matricula: "", metros: "", acept:false })
+        setFormData({ matricula: "", metros: "", acept: false })
         checkboxForm.checked = false
         showmodal()
         return
@@ -413,14 +431,14 @@ function App() {
       }
       {
         features.length < 2 && features.map((feature, index) => (
-          <div className="row mb-5 pb-5 margin-calculo" key={index}>
+          <div className="mb-5 pb-5 margin-calculo" key={index}>
             <div className="container-xxl mt-n5">
               <div className="container z-index-sec">
                 <div className="row g-0 feature-row">
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
@@ -437,7 +455,7 @@ function App() {
                   <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item-1 border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-2.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
@@ -454,7 +472,7 @@ function App() {
                   <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
                     <div className="feature-item border h-100 px-3 py-4 ">
                       <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                        <img className="img-fluid" src="img/icon/icon-simulador-1.svg" alt="Icon" />
+                        <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                       </div>
                       <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
@@ -477,6 +495,63 @@ function App() {
           <>
             <div className='my-5'>
               <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nostros.</h5>
+            </div>
+            <div className="mb-5 pb-5 margin-calculo">
+              <div className="container-xxl">
+                <div className="container z-index-sec">
+                  <div className="row g-0 feature-row">
+                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                      <div className="feature-item-1 border h-100 px-3 py-4 ">
+                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
+                        </div>
+                        <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Comuna <span className="float-end"><strong>{"0"}</strong></span></li>
+                          <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{'cbml'}*</strong></span></li>
+                          <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                          <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(0.00)}</strong></span></li>
+
+                        </ul>
+                        <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                      <div className="feature-item-1 border h-100 px-3 py-4 ">
+                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
+                        </div>
+                        <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
+                          <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
+                          <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands(0.0)}</strong></span></li>
+
+
+                        </ul>
+                        <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
+                      </div>
+                    </div>
+
+                    <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
+                      <div className="feature-item border h-100 px-3 py-4 ">
+                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
+                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
+                        </div>
+                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
+                          <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                          <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                          <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands(0.0)}</strong></span></li>
+                        </ul>
+                        <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </>
         )
