@@ -27,13 +27,12 @@ ApiService.obtainCBL = async (OBTAIN_CBL_API_URL, formdata) => {
         return response
     }
     let data = await obtaintCBL.json()
+    // console.log(data)
     let response = {
         code:data.code,
         msg: data.msg,
         data: data.data
     }
-
-    // console.log(response)
 
     return response
 }

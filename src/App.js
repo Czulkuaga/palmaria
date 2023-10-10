@@ -61,14 +61,6 @@ function App() {
     return parteEntera + parteDecimal;
   }
 
-  // const convertDotsForComa = (numero) => {
-  //    // Convertir el número a una cadena de texto
-  //    let numeroString = numero.toString();
-  //    numeroString.replace(',','.')
-
-  //    let numType = parseFloat(numeroString)
-  //    return numType
-  // }
 
   const inputChangeHandler = e => {
     setErrors({})
@@ -144,6 +136,7 @@ function App() {
     try {
       const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData)
       // console.log(obtainCBL)
+
       if (obtainCBL.data.cbml === "null") {
         setLoad(false)
         setFormData(defaultData)
@@ -188,77 +181,8 @@ function App() {
     }
   }
 
-  // const restartForm = () => {
-  //   // setDir(null)
-  //   setFeatures([])
-  //   setFormData({matricula:"", metros:""})
-  // }
-
   return (
     <>
-      {/* <header>
-
-        <div className="container-fluid bg-menu-top text-white d-none d-lg-flex">
-          <div className="container py-3">
-            <div className="d-flex align-items-center">
-              <a href="/">
-                <img alt="Logo" className="logo-header" src="/img/logo-inmoterra-blanco.svg" />
-
-              </a>
-              <div className="ms-auto d-flex align-items-center">
-                <small className="ms-4"><i className="fa fa-map-marker-alt me-3"></i>Calle 10 Poblado, Medellin, Colombia</small>
-                <small className="ms-4"><i className="fa fa-envelope me-3"></i>info@inmoterra.com</small>
-                <small className="ms-4"><i className="fa fa-phone-alt me-3"></i>+064 345 67890</small>
-                <div className="ms-3 d-flex">
-                  <a className="btn btn-sm-square btn-light text-primary rounded-circle ms-2" href="/"><i className="fab fa-facebook-f"></i></a>
-                  <a className="btn btn-sm-square btn-light text-primary rounded-circle ms-2" href="/"><i className="fab fa-twitter"></i></a>
-                  <a className="btn btn-sm-square btn-light text-primary rounded-circle ms-2" href="/"><i className="fab fa-linkedin-in"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </header> */}
-
-
-
-      {/* Navbar Start */}
-      {/* <div className="container-fluid bg-menu sticky-top">
-        <div className="container">
-          <nav className="navbar navbar-expand-lg bg-menu navbar-light p-lg-0">
-
-            <button type="button" className="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="col-lg-3 ms-lg-n4"><img className="logo-fixed" alt='Logo2' src="/img/logo-horizontal.svg" /> </div>
-            <div className="center collapse pt-1 navbar-collapse" id="navbarCollapse">
-              <div className="navbar-nav">
-                <a href="index.html" className="nav-item nav-link active">Obligaciones Urbanísticas</a>
-                <a href="about.html" className="nav-item nav-link">Nosotros</a>
-
-
-                <div className="nav-item dropdown">
-                  <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
-                  <div className="dropdown-menu bg-light rounded-0 rounded-bottom m-0">
-                    <a href="/" className="dropdown-item">Features</a>
-                    <a href="/" className="dropdown-item">Our Team</a>
-                    <a href="/" className="dropdown-item">Testimonial</a>
-                    <a href="/" className="dropdown-item">Quotation</a>
-                    <a href="/" className="dropdown-item">404 Page</a>
-                  </div>
-                </div>
-                <a href="contact.html" className="nav-item nav-link">Contáctenos</a>
-              </div>
-              <div className="ms-auto d-none d-lg-block">
-                <a href="/" className="btn btn-primary rounded-pill py-2 px-3">Lorem ipsum</a>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div> */}
-      {/* Navbar End */}
-
       {/* Quote Start */}
       <div className=" bg-simulador">
         <div className="container-xxl pt-3">
