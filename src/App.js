@@ -317,13 +317,13 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates"></span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$0</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -344,12 +344,12 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$0</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -362,10 +362,10 @@ function App() {
                           <div className="d-flex flex-row align-items-center ">
                             <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
                             <div className=" c-details">
-                              <h6 className="mb-0 text-green title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
+                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
                             </div>
                           </div>
-                          <div className="text-green price-mobile fs-3 fw-bold"> <span><strong>$0</strong></span> </div>
+                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$0</strong></span> </div>
                         </div>
                         <div className="mt-2">
                           <div className="row px-0">
@@ -479,13 +479,13 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">{feature.attributes.COMUNA}</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*{cbml}*</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*{cbml}*</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates">{formData.metros}</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$ {addDotThousands(feature.attributes.VALOR_M2)}</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -506,12 +506,12 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -524,10 +524,10 @@ function App() {
                           <div className="d-flex flex-row align-items-center ">
                             <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
                             <div className=" c-details">
-                              <h6 className="mb-0 text-green title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
+                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
                             </div>
                           </div>
-                          <div className="text-green price-mobile fs-3 fw-bold"> <span><strong>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span> </div>
+                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span> </div>
                         </div>
                         <div className="mt-2">
                           <div className="row px-0">
@@ -647,13 +647,13 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates"></span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$0</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -674,12 +674,12 @@ function App() {
                         <div className="mt-2">
                           <div className="row px-1">
                             <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
+                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
                             <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$0</span></div>
                           </div>
                           <div className="mt-2">
                             <div className="progress">
-                              <div className="progress-bar bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -692,10 +692,10 @@ function App() {
                           <div className="d-flex flex-row align-items-center ">
                             <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
                             <div className=" c-details">
-                              <h6 className="mb-0 text-green title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
+                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
                             </div>
                           </div>
-                          <div className="text-green price-mobile fs-3 fw-bold"> <span><strong>$0</strong></span> </div>
+                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$0</strong></span> </div>
                         </div>
                         <div className="mt-2">
                           <div className="row px-0">
