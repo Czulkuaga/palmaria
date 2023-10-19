@@ -4,7 +4,8 @@ import './App.css';
 import React from 'react'
 import Sipinner from './Components/Sipinner'
 import ApiService from './Service/ApiService'
-import ModalInfo from './Components/ModalInfo';
+import ModalInfo from './Components/ModalInfo'
+import ReCAPTCHA from "react-google-recaptcha"
 
 const defaultData = {
   fullname: "",
@@ -12,11 +13,12 @@ const defaultData = {
   phone: "",
   matricula: "",
   metros: "",
-  acept: false
+  acept: false,
+  captcha: null
 }
 
 const OBTAIN_CBL_API_URL = `https://www.medellin.gov.co/site_consulta_pot/BuscarFichaMat.hyg?buscar=`
-
+const SITE_KEY = "6Ldjb7MoAAAAACzrcpVi_rgQEQyoPkbOyYs8SAkz"
 function App() {
 
   const [load, setLoad] = React.useState(false)
@@ -28,7 +30,7 @@ function App() {
 
   const fetchPOT = React.useRef(null)
 
-  // console.log(features.length)
+  // console.log(formData)
 
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
@@ -36,13 +38,15 @@ function App() {
   let validNumber = /^[0-9]{10}$/g
   let validEmail = /^[A-Za-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[A-Za-z0-9*+/={|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/g
 
-
-
   const checkboxForm = document.getElementById("exampleCheck1");
 
   const showmodal = () => {
     const btnmodal = document.getElementById('btn-showModal')
     btnmodal.click()
+  }
+
+  const fetchCaptcha = async (value) => {
+    setFormData({ ...formData, captcha: value })
   }
 
   function addDotThousands(numero) {
@@ -60,7 +64,6 @@ function App() {
     // Devolver el número con los puntos de mil agregados
     return parteEntera + parteDecimal;
   }
-
 
   const inputChangeHandler = e => {
     setErrors({})
@@ -87,6 +90,7 @@ function App() {
     if (formData.email === "") newErrors.email = 'El correo electrónico es requerido.';
     if (formData.phone === "") newErrors.phone = 'El número de celular es requerido.';
     if (formData.acept === false) newErrors.acept = 'Si debes continuar, acepta los términos y condiciones del sitio.';
+    if (formData.captcha === null) newErrors.captcha = 'El captcha no es válido';
 
     if (formData.matricula !== "") {
       let isValidNumContact = formData.matricula.match(validarMatricula)
@@ -253,9 +257,19 @@ function App() {
 
                         <div className="mb-3 form-check ms-2 text-start text-white">
                           <input name={"acept"} type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
-                          <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los términos y condiciones de uso</label>
+                          <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className='text-white' target='_blank' rel="noreferrer" href='https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf'>términos y condiciones de uso</a></label>
                           {
                             errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
+                          }
+                        </div>
+
+                        <div>
+                          <ReCAPTCHA
+                            sitekey={SITE_KEY}
+                            onChange={fetchCaptcha}
+                          />,
+                          {
+                            errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
                           }
                         </div>
 
@@ -423,8 +437,7 @@ function App() {
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
                           <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
                           <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-
-
+                          <li className="list-group-item mt-4"></li>
                         </ul>
                         <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
                       </div>
@@ -435,7 +448,7 @@ function App() {
                         <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                           <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                         </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
+                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
                         <ul className="list-group list-group-flush list-simulador mb-4">
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
                           <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
@@ -585,8 +598,7 @@ function App() {
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
                           <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
                           <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
-
-
+                          <li className="list-group-item mt-4"></li>
                         </ul>
                         <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</span> </div>
                       </div>
@@ -597,7 +609,7 @@ function App() {
                         <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                           <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                         </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
+                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
                         <ul className="list-group list-group-flush list-simulador mb-4">
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
                           <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
@@ -754,8 +766,7 @@ function App() {
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
                           <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
                           <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-
-
+                          <li className="list-group-item mt-4"></li>
                         </ul>
                         <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
                       </div>
@@ -766,7 +777,7 @@ function App() {
                         <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
                           <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
                         </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con inmoterra</h5>
+                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
                         <ul className="list-group list-group-flush list-simulador mb-4">
                           <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
                           <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
@@ -785,67 +796,6 @@ function App() {
       }
 
       {/* simulador End */}
-
-      {/* Footer Start */}
-      {/* <div className="container-fluid bg-dark footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
-        <div className="container py-5">
-          <div className="row g-5">
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-white mb-4">Our Office</h4>
-              <p className="mb-2"><i className="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-              <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-              <p className="mb-2"><i className="fa fa-envelope me-3"></i>info@example.com</p>
-              <div className="d-flex pt-3">
-                <a className="btn btn-square btn-light rounded-circle me-2" href="/"><i className="fab fa-twitter"></i></a>
-                <a className="btn btn-square btn-light rounded-circle me-2" href="/"><i className="fab fa-facebook-f"></i></a>
-                <a className="btn btn-square btn-light rounded-circle me-2" href="/"><i className="fab fa-youtube"></i></a>
-                <a className="btn btn-square btn-light rounded-circle me-2" href="/"><i className="fab fa-linkedin-in"></i></a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-white mb-4">Quick Links</h4>
-              <a className="btn btn-link" href="/">About Us</a>
-              <a className="btn btn-link" href="/">Contact Us</a>
-              <a className="btn btn-link" href="/">Our Services</a>
-              <a className="btn btn-link" href="/">Terms & Condition</a>
-              <a className="btn btn-link" href="/">Support</a>
-            </div>
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-white mb-4">Business Hours</h4>
-              <p className="mb-1">Monday - Friday</p>
-              <h6 className="text-light">09:00 am - 07:00 pm</h6>
-              <p className="mb-1">Saturday</p>
-              <h6 className="text-light">09:00 am - 12:00 pm</h6>
-              <p className="mb-1">Sunday</p>
-              <h6 className="text-light">Closed</h6>
-            </div>
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-white mb-4">Newsletter</h4>
-              <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-              <div className="position-relative w-100">
-                <input className="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email" />
-                <button type="button" className="btn btn-light py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-      {/* Footer End */}
-
-      {/* Copyright Start */}
-      {/* <div className="container-fluid copyright py-4">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-              &copy; <a className="fw-medium text-light" href="/">Inmoterra</a>, todos los derechos reservados.
-            </div>
-            <div className="col-md-6 text-center text-md-end">
-              Designed By <a className="fw-medium text-light" href="https://aliatic.com.co/">Aliatic</a>
-            </div>
-          </div>
-        </div>
-      </div> */}
-      {/* Copyright End */}
 
       {/* Back to Top */}
       {/* <a href="/" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a> */}
