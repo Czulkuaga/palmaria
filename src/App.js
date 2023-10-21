@@ -263,7 +263,7 @@ function App() {
                           }
                         </div>
 
-                        <div>
+                        <div> 
                           <ReCAPTCHA
                             sitekey={SITE_KEY}
                             onChange={fetchCaptcha}
