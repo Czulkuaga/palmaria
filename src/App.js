@@ -132,52 +132,68 @@ function App() {
   }
 
   const postData = async (formData) => {
-    // setFormData({
-    //   matricula: formData.matricula,
-    //   metros: convertDotsForComa(formData.metros),
-    //   acept: formData.acept
-    // })
+
     try {
+
       const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData)
+
       // console.log(obtainCBL)
 
-      if (obtainCBL.data.cbml === "null") {
-        setLoad(false)
-        setFormData(defaultData)
-        // restartForm()
-        setFeatures([])
-        setFormData({ matricula: "", metros: "", acept: false })
-        checkboxForm.checked = false
+      if (obtainCBL.code === '200') {
+
+        if (obtainCBL.data.cbml === "null") {
+          setLoad(false)
+          setFormData(defaultData)
+          // restartForm()
+          setFeatures([])
+          setFormData({ matricula: "", metros: "", acept: false })
+          checkboxForm.checked = false
+          showmodal()
+          return
+        }
+
+        const obtainPOT48Data = await ApiService.obtainPOT48Data(obtainCBL.data.cbml)
+
+        if (obtainPOT48Data.code !== '200') {
+          setLoad(false)
+          setFormData(defaultData)
+          setFeatures([])
+          checkboxForm.checked = false
+          showmodal()
+          return
+        }
+
+        const ring1 = obtainPOT48Data.data.features[0].geometry.rings[0]
+
+        const xmin = ring1[0][0]
+        const ymin = ring1[0][1]
+        const xmax = ring1[3][0]
+        const ymax = ring1[3][1]
+
+        setCbml(obtainCBL.data.cbml)
+
+        const spartialReference = obtainPOT48Data.data.spatialReference
+
+        const obtainM2value = await ApiService.obtainValueM2(xmin, ymin, xmax, ymax, spartialReference)
+
+        if (obtainM2value.code !== '200') {
+          setLoad(false)
+          setFormData(defaultData)
+          setFeatures([])
+          showmodal()
+          checkboxForm.checked = false
+        } else {
+          // console.log(obtainM2value)
+          checkboxForm.checked = false
+          setFeatures(obtainM2value.data.features)
+          setLoad(false)
+        }
+
+      } else {
         showmodal()
-        return
-      }
-      // console.log(features.length)
-      const obtainPOT48Data = await ApiService.obtainPOT48Data(obtainCBL.data.cbml)
-      // console.log(obtainPOT48Data)
-      if (obtainPOT48Data.code !== '200') {
-        setLoad(false)
         setFormData(defaultData)
-        return
       }
-      // console.log(obtainPOT48Data.data.features[0].geometry.rings)
-      const ring1 = obtainPOT48Data.data.features[0].geometry.rings[0]
-      // console.log(obtainPOT48Data.data)
-      const xmin = ring1[0][0]
-      const ymin = ring1[0][1]
-      const xmax = ring1[3][0]
-      const ymax = ring1[3][1]
 
-      setCbml(obtainCBL.data.cbml)
-      const spartialReference = obtainPOT48Data.data.spatialReference
-
-      const obtainM2value = await ApiService.obtainValueM2(xmin, ymin, xmax, ymax, spartialReference)
-      // console.log(obtainM2value)
-
-      setFeatures(obtainM2value.data.features)
-      // setFormData({matricula:"", metros:""})
-      // setDir(obtainCBL.data.direccion)
-      setLoad(false)
-      // restartForm()
     } catch (error) {
       setLoad(false)
       console.log(error)
@@ -187,624 +203,305 @@ function App() {
 
   return (
     <>
-      {/* Quote Start */}
-      <div className=" bg-simulador">
-        <div className="container-xxl pt-3">
-          <div className="container">
+      
+      <main>
 
-            <div className="row g-5">
 
-              <div className="col-lg-8 wow fadeInUp pt-5" data-wow-delay="0.5s">
-                <h2 className="title-simulador mb-4 ">Simulador de pago para obligaciones urbanísticas </h2>
 
-                <p className="descrip-simulador mb-5">Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
-                <div className="container">
 
-                  <div className="row g-3">
 
-                    <form className='form-display' ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
+        <div class="contact-form">
 
-                      <div className="row g-3">
+          <div class="contact-form-box__right">
 
-                        <div className="col-sm-4 mb-4 mb-md-5 ">
-                          <div className="form-floating">
-                            <input name={"fullname"} value={formData.fullname} type="text" className="form-control" id="fullname" aria-describedby="fullname" onChange={(e) => inputChangeHandler(e)} />
-                            <label htmlFor="fullname"> Nombre y apellidos*</label>
-                            {
-                              errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
-                            }
-                          </div>
-                        </div>
+            <form ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
 
-                        <div className="col-sm-4 mb-4 mb-md-5 ">
-                          <div className="form-floating">
-                            <input name={"email"} value={formData.email} type="text" className="form-control" id="email" aria-describedby="email" onChange={(e) => inputChangeHandler(e)} />
-                            <label htmlFor="email"> Correo electronico*</label>
-                            {
-                              errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
-                            }
-                          </div>
-                        </div>
-                        <div className="col-sm-4 mb-4 mb-md-5 ">
-                          <div className="form-floating">
-                            <input name={"phone"} value={formData.phone} type="number" className="form-control" id="phone" aria-describedby="phone" onChange={(e) => inputChangeHandler(e)} />
-                            <label htmlFor="phone">Número Celular*</label>
-                            {
-                              errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
-                            }
-                          </div>
-                        </div>
-
-                        <div className="col-sm-6 mb-md-1 mb-4">
-                          <div className="form-floating">
-                            <input name={"matricula"} value={formData.matricula} type="number" className="form-control" id="NumMatricula" aria-describedby="numMatriculaHelp" onChange={(e) => inputChangeHandler(e)} />
-                            <label htmlFor="NumMatricula"> Número de matricula</label>
-                            {
-                              errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
-                            }
-                          </div>
-                        </div>
-
-                        <div className="col-sm-6 mb-md-1 mb-4">
-                          <div className="form-floating">
-                            <input name={"metros"} value={formData.metros} type="string" className="form-control" id="Metros" aria-describedby="metrosHelp" onChange={(e) => inputChangeHandler(e)} />
-                            <label htmlFor="Metros">M2 del lote</label>
-                            {
-                              errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
-                            }
-                          </div>
-                        </div>
-
-                        <div className="mb-3 form-check ms-2 text-start text-white">
-                          <input name={"acept"} type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => inputChangeHandler(e)} />
-                          <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className='text-white' target='_blank' rel="noreferrer" href='https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf'>términos y condiciones de uso</a></label>
-                          {
-                            errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
-                          }
-                        </div>
-
-                        <div> 
-                          <ReCAPTCHA
-                            sitekey={SITE_KEY}
-                            onChange={fetchCaptcha}
-                          />,
-                          {
-                            errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
-                          }
-                        </div>
-
-                        {
-                          load ? <>
-                            <Sipinner />
-                          </> :
-                            <>
-                              <div className="col-3 p-0 mb-5">
-                                <button type="submit" className="btn btn-warning rounded-pill py-3 px-5">Calcular</button>
-                              </div>
-                            </>
-                        }
-                      </div>
-                    </form>
+              <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <h3 class="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
+                    <hr />
+                    <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
                   </div>
+                  <div class="col-12 col-md-6 mb-4">
+                    <div class="floating-label-wrap ">
+                      <input name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
+                      <label htmlFor="fullname" class="floating-label">Nombres y Apellidos*</label>
+                      {
+                        errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
+                      }
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 mb-4">
+                    <div class="floating-label-wrap ">
+                      <input name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
+                      <label htmlFor="email" class="floating-label">Correo Electonico*</label>
+                      {
+                        errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
+                      }
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 mb-4">
+                    <div class="floating-label-wrap ">
+                      <input name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" class="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
+                      <label htmlFor="phone" class="floating-label">Número Celular*</label>
+                      {
+                        errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
+                      }
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 mb-4">
+                    <div class="floating-label-wrap ">
+                      <input name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" class="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
+                      <label htmlFor="matricula" class="floating-label"> Número de matricula*</label>
+                      {
+                        errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
+                      }
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 mb-4">
+                    <div class="floating-label-wrap ">
+                      <input name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
+                      <label htmlFor="metros" class="floating-label"> M2 del lote*</label>
+                      {
+                        errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
+                      }
+                    </div>
+                  </div>
+
+
+                  <div class="col-12 col-md-6 mb-4">
+                    <ReCAPTCHA
+                      sitekey={SITE_KEY}
+                      onChange={fetchCaptcha}
+                    />
+                    {
+                      errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
+                    }
+                  </div>
+
+
+
+                  <div class="col-12 mt-1">
+                    <div class="mb-3 form-check ms-2 text-start ">
+                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" class="form-check-input " id="exampleCheck1" />
+                      <label class="form-check-label" for="exampleCheck1">He leído y acepto los <a class="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
+                      {
+                        errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
+                      }
+                    </div>
+                  </div>
+
+                  <div className="d-grid gap-2 col-12">
+                    {
+                      load ? <>
+                        <div className="col-12 p-0 d-flex justify-content-center">
+                          <Sipinner />
+                        </div>
+                      </> :
+                        <>
+                          <div className="col-12 p-0 mb-5 d-flex justify-content-center">
+                            <button type='submit' className="btn btn-secondary rounded-pill py-3 px-5 mt-4">Calcular</button>
+                          </div>
+                        </>
+                    }
+
+                  </div>
+
                 </div>
               </div>
-
-              <div className="col-lg-4 px-4 wow fadeInUp  d-lg-block d-none" data-wow-delay="0.1s">
-                <picture className="second animated fadeInUp">
-                  <source media="(min-width: 767px)" srcSet="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" />
-                  <img style={{ marginTop: '150px', width: '550px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/img-simulador-2.png" alt="" />
-                </picture>
-              </div>
-
-            </div>
+            </form>
           </div>
+
+
+          {
+            features.length < 2 && features.map((feature, index) => (
+              <React.Fragment key={index}>
+                <div class="contact-form-box__left">
+                  <h5 class="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                  <ul class="list-group list-group-flush list-simulador mb-4">
+                    <li class="list-group-item">Dirección <span class="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>*{cbml}*</strong></span></li>
+                    <li class="list-group-item">M2 calculados <span class="float-end"><strong>{formData.metros}</strong></span></li>
+                    <li class="list-group-item">Valor por m2<span class="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+                    <li class="list-group-item"><strong>Total obligaciones</strong><span class="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
+
+                  </ul>
+
+
+                  <h5 class="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="img/icon/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                  <ul class="list-group list-group-flush list-simulador mb-4">
+                    <li class="list-group-item">Total obligaciones <span class="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>+15%</strong></span></li>
+                    <li class="list-group-item">Total recargo <span class="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+                    <li class="list-group-item"><strong>Total pago en efectivo</strong><span class="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
+                  </ul>
+
+
+                  <h5 class="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                  <ul class="list-group list-group-flush list-simulador mb-4">
+                    <li class="list-group-item">Total obligaciones<span class="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong class="text-success">-15%</strong></span></li>
+                    <li class="list-group-item">Descuento obligaciones <span class="float-end"><strong class="text-success">-15%</strong></span></li>
+                    <li class="list-group-item">Descuento total <span class="float-end"><strong class="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                    <li class="list-group-item"><strong>Total pago de obligaciones</strong><span class="float-end"><strong class="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
+
+                  </ul>
+
+                </div>
+
+                {/* inicio simulador mobile collapse */}
+
+                <div className="mt-5 d-md-none d-block">
+                  <div className=" mt-n5">
+                    <div className="container px-1 z-index-sec">
+
+                      <div className="row g-0 ">
+
+                        <div className="col-md-4">
+                          <div className="card shadow-lg borde px-1 py-2 mb-4">
+                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
+                              <div className="d-flex flex-row align-items-center ">
+                                <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
+                                <div className=" c-details">
+                                  <h6 className="mb-0 text-primary title-detalle-mobile">Calculo obligación</h6>
+                                </div>
+                              </div>
+                              <div className="text-primary price-mobile"> <span><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span> </div>
+                            </div>
+                            <div className="mt-2">
+                              <div className="row px-1">
+                                <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">{feature.attributes.COMUNA}</span></div>
+                                <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*{cbml}*</span></div>
+                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates">{formData.metros}</span></div>
+                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$ {addDotThousands(feature.attributes.VALOR_M2)}</span></div>
+                              </div>
+                              <div className="mt-2">
+                                <div className="progress">
+                                  <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4">
+                          <div className="card shadow-lg borde px-1 py-2 mb-4">
+                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
+                              <div className="d-flex flex-row align-items-center ">
+                                <div className=""> <img className="me-2" style={{ width: '38px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" /> </div>
+                                <div className=" c-details">
+                                  <h6 className="mb-0 text-efectivo title-detalle-mobile">PAGO EN EFECTIVO</h6>
+                                </div>
+                              </div>
+                              <div className="text-efectivo price-mobile"> <span><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span> </div>
+                            </div>
+                            <div className="mt-2">
+                              <div className="row px-1">
+                                <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</span></div>
+                                <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
+                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</span></div>
+                              </div>
+                              <div className="mt-2">
+                                <div className="progress">
+                                  <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4">
+                          <div className="card shadow-lg borde px-2 py-1 mb-4">
+                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
+                              <div className="d-flex flex-row align-items-center ">
+                                <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
+                                <div className=" c-details">
+                                  <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
+                                </div>
+                              </div>
+                              <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span> </div>
+                            </div>
+                            <div className="mt-2">
+                              <div className="row px-0">
+                                <div className="col text-center py-1  "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</span></div>
+                                <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Efectivo</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
+                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Adicional</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
+                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Des Total </p> <span className="fw-semibold font-dates text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</span></div>
+                              </div>
+                              <div className="mt-2">
+                                <div className="progress">
+                                  <div className="progress-bar bg-success" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* fin simulador mobile collapse */}
+              </React.Fragment>
+            ))
+          }
+
+
+          {/* Sin Búsqueda */}
+
+          {
+            features.length === 0 && (
+              <div class="contact-form-box__left">
+                <h5 class="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                <ul class="list-group list-group-flush list-simulador mb-4">
+                  <li class="list-group-item">Dirección <span class="float-end"><strong>0</strong></span></li>
+                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>*cbml*</strong></span></li>
+                  <li class="list-group-item">M2 calculados <span class="float-end"><strong>0</strong></span></li>
+                  <li class="list-group-item">Valor por m2<span class="float-end"><strong>$0</strong></span></li>
+                  <li class="list-group-item"><strong>Total obligaciones</strong><span class="float-end"><strong>$0</strong></span></li>
+
+                </ul>
+
+
+                <h5 class="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="img/icon/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                <ul class="list-group list-group-flush list-simulador mb-4">
+                  <li class="list-group-item">Total obligaciones <span class="float-end"><strong>$0</strong></span></li>
+                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>+15%</strong></span></li>
+                  <li class="list-group-item">Total recargo <span class="float-end"><strong>$0</strong></span></li>
+                  <li class="list-group-item"><strong>Total pago en efectivo</strong><span class="float-end"><strong>$0</strong></span></li>
+
+                </ul>
+
+
+                <h5 class="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                <ul class="list-group list-group-flush list-simulador mb-4">
+                  <li class="list-group-item">Total obligaciones<span class="float-end"><strong>$0</strong></span></li>
+                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong class="text-success">-15%</strong></span></li>
+                  <li class="list-group-item">Descuento obligaciones <span class="float-end"><strong class="text-success">-15%</strong></span></li>
+                  <li class="list-group-item">Descuento total <span class="float-end"><strong class="text-success">$0</strong></span></li>
+                  <li class="list-group-item"><strong>Total pago de obligaciones</strong><span class="float-end"><strong class="text-success">$0</strong></span></li>
+
+                </ul>
+
+              </div>
+            )
+          }
+
+          {/* Fin sin Búsqueda */}
         </div>
 
-      </div>
-      {/* Quote Start */}
+        <button hidden id='btn-showModal' type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Launch demo modal
+        </button>
 
-      {/* simulador Start */}
-      {
-        features.length === 0 && (
-          <>
-            {/* Vista Mobile */}
+        <ModalInfo message={"No hay datos para mostrar"} />
 
-            {/* inicio simulador mobile collapse */}
-
-            <div className=" mb-5 pb-5 d-md-none d-block">
-              <div className=" mt-n5">
-                <div className="container px-1 z-index-sec">
-
-                  <div className="row g-0 ">
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-primary title-detalle-mobile">Calculo obligación</h6>
-                            </div>
-                          </div>
-                          <div className="text-primary price-mobile"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">0</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates"></span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: '38px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-efectivo title-detalle-mobile">PAGO EN EFECTIVO</h6>
-                            </div>
-                          </div>
-                          <div className="text-efectivo price-mobile"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-2 py-1 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
-                            </div>
-                          </div>
-                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-0">
-                            <div className="col text-center py-1  "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14"> Efectivo</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Adicional</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Des Total </p> <span className="fw-semibold font-dates text-success">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="progress-bar bg-success" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* fin simulador mobile collapse */}
-
-            {/* Vista Tablet y Escritorio */}
-
-            <div className="mb-5 pb-5 margin-calculo d-md-block d-none">
-              <div className="container-xxl">
-                <div className="container z-index-sec">
-                  <div className="row g-0 feature-row">
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Comuna <span className="float-end"><strong>{"0"}</strong></span></li>
-                          <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{'cbml'}*</strong></span></li>
-                          <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                          <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(0.00)}</strong></span></li>
-
-                        </ul>
-                        <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
-                          <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item mt-4"></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )
-      }
-      {
-        features.length < 2 && features.map((feature, index) => (
-          <React.Fragment key={index}>
-            {/* Vista Mobile */}
-
-            {/* inicio simulador mobile collapse */}
-
-            <div className=" mb-5 pb-5 d-md-none d-block">
-              <div className=" mt-n5">
-                <div className="container px-1 z-index-sec">
-
-                  <div className="row g-0 ">
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-primary title-detalle-mobile">Calculo obligación</h6>
-                            </div>
-                          </div>
-                          <div className="text-primary price-mobile"> <span><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">{feature.attributes.COMUNA}</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*{cbml}*</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates">{formData.metros}</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$ {addDotThousands(feature.attributes.VALOR_M2)}</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: '38px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-efectivo title-detalle-mobile">PAGO EN EFECTIVO</h6>
-                            </div>
-                          </div>
-                          <div className="text-efectivo price-mobile"> <span><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-2 py-1 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
-                            </div>
-                          </div>
-                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-0">
-                            <div className="col text-center py-1  "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Efectivo</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Adicional</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Des Total </p> <span className="fw-semibold font-dates text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="progress-bar bg-success" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* fin simulador mobile collapse */}
-
-            {/* Vista Tablet y Escritorio */}
-
-            <div className="mb-5 pb-5 margin-calculo d-md-block d-none">
-              <div className="container-xxl mt-n5">
-                <div className="container z-index-sec">
-                  <div className="row g-0 feature-row">
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Comuna <span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                          <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{cbml}*</strong></span></li>
-                          <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                          <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
-
-                        </ul>
-                        <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
-                          <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
-                          <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
-                          <li className="list-group-item mt-4"></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
-                          <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</span> </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </React.Fragment>
-
-        ))
-      }
-      {
-        features.length >= 2 && (
-          <>
-            <div className='my-5'>
-              <h5 className='text-center'>Actualmente no se pueden mostrar los datos, por favor contáctese con nostros.</h5>
-            </div>
-
-            {/* Vista Mobile */}
-
-            {/* inicio simulador mobile collapse */}
-
-            <div className=" mb-5 pb-5 d-md-none d-block">
-              <div className=" mt-n5">
-                <div className="container px-1 z-index-sec">
-
-                  <div className="row g-0 ">
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-primary title-detalle-mobile">Calculo obligación</h6>
-                            </div>
-                          </div>
-                          <div className="text-primary price-mobile"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">0</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*cbml*</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates"></span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-1 py-2 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: '38px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-efectivo title-detalle-mobile">PAGO EN EFECTIVO</h6>
-                            </div>
-                          </div>
-                          <div className="text-efectivo price-mobile"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-1">
-                            <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="card shadow-lg borde px-2 py-1 mb-4">
-                        <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                          <div className="d-flex flex-row align-items-center ">
-                            <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                            <div className=" c-details">
-                              <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
-                            </div>
-                          </div>
-                          <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$0</strong></span> </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="row px-0">
-                            <div className="col text-center py-1  "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$0</span></div>
-                            <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14"> Efectivo</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Adicional</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                            <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Des Total </p> <span className="fw-semibold font-dates text-success">$0</span></div>
-                          </div>
-                          <div className="mt-2">
-                            <div className="progress">
-                              <div className="progress-bar bg-success" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* fin simulador mobile collapse */}
-
-            {/* Vista Tablet y Escritorio */}
-
-
-            <div className="mb-5 pb-5 margin-calculo d-md-block d-none">
-              <div className="container-xxl">
-                <div className="container z-index-sec">
-                  <div className="row g-0 feature-row">
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-primary">Calculo de obligación</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Comuna <span className="float-end"><strong>{"0"}</strong></span></li>
-                          <li className="list-group-item">Codigo catastral<span className="float-end"><strong>*{'cbml'}*</strong></span></li>
-                          <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                          <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(0.00)}</strong></span></li>
-
-                        </ul>
-                        <div className="cont-valor-simulador bg-primary">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item-1 border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-efectivo">Si pagas en efectivo</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end text-danger"><strong>+15%</strong></span></li>
-                          <li className="list-group-item">Total recargo <span className="float-end text-danger"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item mt-4"></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-efectivo">Total pago en efectivo  <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-12 col-lg-4 wow fadeIn mb-3" data-wow-delay="0.1s">
-                      <div className="feature-item border h-100 px-3 py-4 ">
-                        <div className="btn-square bg-light rounded-circle mb-4" style={{ width: "50px", height: "50px", margin: "0px auto" }}>
-                          <img className="img-fluid" src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />
-                        </div>
-                        <h5 className="mb-3 text-center title-detalle text-green">Si pagas con PALMARIA</h5>
-                        <ul className="list-group list-group-flush list-simulador mb-4">
-                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                          <li className="list-group-item">Recargo  pago en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                          <li className="list-group-item">Descuento total <span className="float-end text-success"><strong>$ {addDotThousands(0.0)}</strong></span></li>
-                        </ul>
-                        <div className="cont-valor-simulador bg-green-cont">Total obligaciones <br /> <span style={{ fontSize: "25px", fontWeight: 600 }}>$ {addDotThousands(0.0)}</span> </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )
-      }
-
-      {/* simulador End */}
-
-      {/* Back to Top */}
-      {/* <a href="/" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a> */}
-
-      <button hidden id='btn-showModal' type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-      </button>
-
-      <ModalInfo message={"No hay datos para mostrar"} />
+      </main>
     </>
   );
 }
