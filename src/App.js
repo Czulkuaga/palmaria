@@ -29,6 +29,7 @@ function App() {
   const [features, setFeatures] = React.useState([])
 
   const fetchPOT = React.useRef(null)
+  const captcha = React.useRef(null)
 
   // console.log(formData)
 
@@ -83,6 +84,8 @@ function App() {
     e.preventDefault()
     setLoad(true)
     const newErrors = {}
+
+    console.log(formData)
 
     if (formData.matricula === "") newErrors.matricula = 'Debes indicar la matricula del terreno para poder realizar la consulta.';
     if (formData.metros === "") newErrors.metros = 'Debes especificar la cantidad de metros a consultar.';
@@ -143,10 +146,9 @@ function App() {
 
         if (obtainCBL.data.cbml === "null") {
           setLoad(false)
-          setFormData(defaultData)
-          // restartForm()
+          setFormData({...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone})
           setFeatures([])
-          setFormData({ matricula: "", metros: "", acept: false })
+          captcha.current.reset()
           checkboxForm.checked = false
           showmodal()
           return
@@ -206,66 +208,62 @@ function App() {
       
       <main>
 
+        <div className="contact-form">
 
-
-
-
-        <div class="contact-form">
-
-          <div class="contact-form-box__right">
+          <div className="contact-form-box__right">
 
             <form ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
 
-              <div class="container">
-                <div class="row">
-                  <div class="col-12">
-                    <h3 class="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
+              <div className="container">
+                <div className="row">
+                  <div className="col-12">
+                    <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
                     <hr />
                     <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
                   </div>
-                  <div class="col-12 col-md-6 mb-4">
-                    <div class="floating-label-wrap ">
-                      <input name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
-                      <label htmlFor="fullname" class="floating-label">Nombres y Apellidos*</label>
+                  <div className="col-12 col-md-6 mb-4">
+                    <div className="floating-label-wrap ">
+                      <input autoComplete='none' name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
+                      <label htmlFor="fullname" className="floating-label">Nombres y Apellidos*</label>
                       {
                         errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
                       }
                     </div>
                   </div>
-                  <div class="col-12 col-md-6 mb-4">
-                    <div class="floating-label-wrap ">
-                      <input name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
-                      <label htmlFor="email" class="floating-label">Correo Electonico*</label>
+                  <div className="col-12 col-md-6 mb-4">
+                    <div className="floating-label-wrap ">
+                      <input autoComplete='none' name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
+                      <label htmlFor="email" className="floating-label">Correo Electonico*</label>
                       {
                         errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
                       }
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-6 mb-4">
-                    <div class="floating-label-wrap ">
-                      <input name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" class="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
-                      <label htmlFor="phone" class="floating-label">Número Celular*</label>
+                  <div className="col-12 col-md-6 mb-4">
+                    <div className="floating-label-wrap ">
+                      <input autoComplete='none' name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
+                      <label htmlFor="phone" className="floating-label">Número Celular*</label>
                       {
                         errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
                       }
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-6 mb-4">
-                    <div class="floating-label-wrap ">
-                      <input name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" class="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
-                      <label htmlFor="matricula" class="floating-label"> Número de matricula*</label>
+                  <div className="col-12 col-md-6 mb-4">
+                    <div className="floating-label-wrap ">
+                      <input autoComplete='none' name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
+                      <label htmlFor="matricula" className="floating-label"> Número de matricula*</label>
                       {
                         errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
                       }
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-6 mb-4">
-                    <div class="floating-label-wrap ">
-                      <input name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" class="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
-                      <label htmlFor="metros" class="floating-label"> M2 del lote*</label>
+                  <div className="col-12 col-md-6 mb-4">
+                    <div className="floating-label-wrap ">
+                      <input autoComplete='none' name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
+                      <label htmlFor="metros" className="floating-label"> M2 del lote*</label>
                       {
                         errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
                       }
@@ -273,8 +271,9 @@ function App() {
                   </div>
 
 
-                  <div class="col-12 col-md-6 mb-4">
+                  <div className="col-12 col-md-6 mb-4">
                     <ReCAPTCHA
+                      ref={captcha}
                       sitekey={SITE_KEY}
                       onChange={fetchCaptcha}
                     />
@@ -285,10 +284,10 @@ function App() {
 
 
 
-                  <div class="col-12 mt-1">
-                    <div class="mb-3 form-check ms-2 text-start ">
-                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" class="form-check-input " id="exampleCheck1" />
-                      <label class="form-check-label" for="exampleCheck1">He leído y acepto los <a class="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
+                  <div className="col-12 mt-1">
+                    <div className="mb-3 form-check ms-2 text-start ">
+                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1" />
+                      <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
                       {
                         errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
                       }
@@ -320,34 +319,34 @@ function App() {
           {
             features.length < 2 && features.map((feature, index) => (
               <React.Fragment key={index}>
-                <div class="contact-form-box__left">
-                  <h5 class="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
-                  <ul class="list-group list-group-flush list-simulador mb-4">
-                    <li class="list-group-item">Dirección <span class="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>*{cbml}*</strong></span></li>
-                    <li class="list-group-item">M2 calculados <span class="float-end"><strong>{formData.metros}</strong></span></li>
-                    <li class="list-group-item">Valor por m2<span class="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
-                    <li class="list-group-item"><strong>Total obligaciones</strong><span class="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
+                <div className="contact-form-box__left">
+                  <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Dirección <span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>*{cbml}*</strong></span></li>
+                    <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                    <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+                    <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
 
                   </ul>
 
 
-                  <h5 class="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="img/icon/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
-                  <ul class="list-group list-group-flush list-simulador mb-4">
-                    <li class="list-group-item">Total obligaciones <span class="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
-                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>+15%</strong></span></li>
-                    <li class="list-group-item">Total recargo <span class="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
-                    <li class="list-group-item"><strong>Total pago en efectivo</strong><span class="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
+                  <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                    <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
                   </ul>
 
 
-                  <h5 class="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
-                  <ul class="list-group list-group-flush list-simulador mb-4">
-                    <li class="list-group-item">Total obligaciones<span class="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
-                    <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong class="text-success">-15%</strong></span></li>
-                    <li class="list-group-item">Descuento obligaciones <span class="float-end"><strong class="text-success">-15%</strong></span></li>
-                    <li class="list-group-item">Descuento total <span class="float-end"><strong class="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
-                    <li class="list-group-item"><strong>Total pago de obligaciones</strong><span class="float-end"><strong class="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
+                  <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
 
                   </ul>
 
@@ -456,35 +455,35 @@ function App() {
 
           {
             features.length === 0 && (
-              <div class="contact-form-box__left">
-                <h5 class="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
-                <ul class="list-group list-group-flush list-simulador mb-4">
-                  <li class="list-group-item">Dirección <span class="float-end"><strong>0</strong></span></li>
-                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>*cbml*</strong></span></li>
-                  <li class="list-group-item">M2 calculados <span class="float-end"><strong>0</strong></span></li>
-                  <li class="list-group-item">Valor por m2<span class="float-end"><strong>$0</strong></span></li>
-                  <li class="list-group-item"><strong>Total obligaciones</strong><span class="float-end"><strong>$0</strong></span></li>
+              <div className="contact-form-box__left">
+                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Dirección <span className="float-end"><strong>0</strong></span></li>
+                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>*cbml*</strong></span></li>
+                  <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
+                  <li className="list-group-item">Valor por m2<span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$0</strong></span></li>
 
                 </ul>
 
 
-                <h5 class="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="img/icon/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
-                <ul class="list-group list-group-flush list-simulador mb-4">
-                  <li class="list-group-item">Total obligaciones <span class="float-end"><strong>$0</strong></span></li>
-                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong>+15%</strong></span></li>
-                  <li class="list-group-item">Total recargo <span class="float-end"><strong>$0</strong></span></li>
-                  <li class="list-group-item"><strong>Total pago en efectivo</strong><span class="float-end"><strong>$0</strong></span></li>
+                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                  <li className="list-group-item">Total recargo <span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$0</strong></span></li>
 
                 </ul>
 
 
-                <h5 class="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="img/icon/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
-                <ul class="list-group list-group-flush list-simulador mb-4">
-                  <li class="list-group-item">Total obligaciones<span class="float-end"><strong>$0</strong></span></li>
-                  <li class="list-group-item">Recargo su pagas en efectivo <span class="float-end"><strong class="text-success">-15%</strong></span></li>
-                  <li class="list-group-item">Descuento obligaciones <span class="float-end"><strong class="text-success">-15%</strong></span></li>
-                  <li class="list-group-item">Descuento total <span class="float-end"><strong class="text-success">$0</strong></span></li>
-                  <li class="list-group-item"><strong>Total pago de obligaciones</strong><span class="float-end"><strong class="text-success">$0</strong></span></li>
+                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                  <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                  <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$0</strong></span></li>
 
                 </ul>
 

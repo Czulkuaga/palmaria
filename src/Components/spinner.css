@@ -12,13 +12,12 @@
 }
 
 .lds-roller div:after {
-    content: " ";
     display: block;
     position: absolute;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #FE0000;
+    background: #0D3C5E;
     margin: -4px 0 0 -4px;
 }
 
