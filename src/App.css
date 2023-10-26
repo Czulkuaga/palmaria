@@ -4,6 +4,7 @@
   --secondary: #555555;
   --light: #F1F3FA;
   --dark: #1C2035;
+  --green: #688400;
 }
 
 
@@ -110,6 +111,7 @@ h5 {
 .text-blue {
   color: #103C55;
   font-size: 1.5em;
+  font-weight: 700;
 }
 
 .icon-pagos {
@@ -1538,4 +1540,19 @@ p {
 
 .modal{
   z-index: 9999;
+}
+
+.btn-green {
+  background-color: #688400;
+  color: #ffffff
+}
+
+.btn-green:hover{
+  background-color: #83a700;
+  color: #ffffff
+}
+
+.captch-style{
+  -webkit-transform: scale(1);
+  transform: scale(0.9);
 }

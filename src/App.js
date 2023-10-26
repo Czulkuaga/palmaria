@@ -276,6 +276,7 @@ function App() {
                       ref={captcha}
                       sitekey={SITE_KEY}
                       onChange={fetchCaptcha}
+                      className='captch-style'
                     />
                     {
                       errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
@@ -303,7 +304,7 @@ function App() {
                       </> :
                         <>
                           <div className="col-12 p-0 mb-5 d-flex justify-content-center">
-                            <button type='submit' className="btn btn-secondary rounded-pill py-3 px-5 mt-4">Calcular</button>
+                            <button type='submit' className="btn btn-green rounded-pill py-3 px-5 mt-4">Calcular</button>
                           </div>
                         </>
                     }
@@ -322,8 +323,8 @@ function App() {
                 <div className="contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
-                    <li className="list-group-item">Dirección <span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>*{cbml}*</strong></span></li>
+                    <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                    <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
                     <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
                     <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
                     <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
@@ -334,7 +335,7 @@ function App() {
                   <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
                     <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
                     <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
                     <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
                   </ul>
@@ -343,7 +344,7 @@ function App() {
                   <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
                     <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
                     <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
                     <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
                     <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
@@ -458,8 +459,8 @@ function App() {
               <div className="contact-form-box__left">
                 <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
-                  <li className="list-group-item">Dirección <span className="float-end"><strong>0</strong></span></li>
-                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>*cbml*</strong></span></li>
+                  <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
+                  <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
                   <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
                   <li className="list-group-item">Valor por m2<span className="float-end"><strong>$0</strong></span></li>
                   <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$0</strong></span></li>
@@ -470,7 +471,7 @@ function App() {
                 <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
                   <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
                   <li className="list-group-item">Total recargo <span className="float-end"><strong>$0</strong></span></li>
                   <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$0</strong></span></li>
 
@@ -480,7 +481,7 @@ function App() {
                 <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
                   <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item">Recargo su pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
                   <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
                   <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$0</strong></span></li>
                   <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$0</strong></span></li>
