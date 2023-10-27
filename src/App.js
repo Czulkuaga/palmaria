@@ -321,6 +321,47 @@ function App() {
             </form>
           </div>
 
+          {/* Sin Búsqueda */}
+
+          {
+            features.length === 0 && (
+              <div className="contact-form-box__left">
+                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
+                  <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
+                  <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
+                  <li className="list-group-item">Valor por m2<span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$0</strong></span></li>
+
+                </ul>
+
+
+                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                  <li className="list-group-item">Total recargo <span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$0</strong></span></li>
+
+                </ul>
+
+
+                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
+                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                  <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                  <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$0</strong></span></li>
+                  <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$0</strong></span></li>
+
+                </ul>
+
+              </div>
+            )
+          }
+
+          {/* Fin sin Búsqueda */}
 
           {
             features.length < 2 && features.map((feature, index) => (
@@ -360,7 +401,7 @@ function App() {
 
                 {/* inicio simulador mobile collapse */}
 
-                <div className="mt-5 d-md-none d-block">
+                {/* <div className="mt-5 d-md-none d-block">
                   <div className=" mt-n5">
                     <div className="container px-1 z-index-sec">
 
@@ -449,55 +490,57 @@ function App() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* fin simulador mobile collapse */}
               </React.Fragment>
             ))
           }
 
-
-          {/* Sin Búsqueda */}
-
           {
-            features.length === 0 && (
-              <div className="contact-form-box__left">
-                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
-                <ul className="list-group list-group-flush list-simulador mb-4">
-                  <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
-                  <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
-                  <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
-                  <li className="list-group-item">Valor por m2<span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$0</strong></span></li>
+            features.length > 2 && (
+              <>
+                <div className="contact-form-box__left">
+                  <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
+                    <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
+                    <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
+                    <li className="list-group-item">Valor por m2<span className="float-end"><strong>$0</strong></span></li>
+                    <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$0</strong></span></li>
 
-                </ul>
-
-
-                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
-                <ul className="list-group list-group-flush list-simulador mb-4">
-                  <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
-                  <li className="list-group-item">Total recargo <span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$0</strong></span></li>
-
-                </ul>
+                  </ul>
 
 
-                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
-                <ul className="list-group list-group-flush list-simulador mb-4">
-                  <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
-                  <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                  <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                  <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$0</strong></span></li>
-                  <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$0</strong></span></li>
+                  <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                    <li className="list-group-item">Total recargo <span className="float-end"><strong>$0</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$0</strong></span></li>
 
-                </ul>
+                  </ul>
 
-              </div>
+
+                  <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$0</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$0</strong></span></li>
+
+                  </ul>
+
+                </div>
+
+                <div className='mt-2 mb-2'>
+                  <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
+                </div>
+              </>
             )
           }
 
-          {/* Fin sin Búsqueda */}
         </div>
 
         <button hidden id='btn-showModal' type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
