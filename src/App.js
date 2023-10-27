@@ -2,10 +2,10 @@
 import './App.css';
 // import CardInfo from './Components/CardInfo';
 import React from 'react'
-import Sipinner from './Components/Sipinner'
 import ApiService from './Service/ApiService'
 import ModalInfo from './Components/ModalInfo'
 import ReCAPTCHA from "react-google-recaptcha"
+import Spinner2 from './Components/Spinner2';
 
 const defaultData = {
   fullname: "",
@@ -146,7 +146,7 @@ function App() {
 
         if (obtainCBL.data.cbml === "null") {
           setLoad(false)
-          setFormData({...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone})
+          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
           captcha.current.reset()
           checkboxForm.checked = false
@@ -158,7 +158,7 @@ function App() {
 
         if (obtainPOT48Data.code !== '200') {
           setLoad(false)
-          setFormData(defaultData)
+          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
           checkboxForm.checked = false
           showmodal()
@@ -183,17 +183,23 @@ function App() {
           setFormData(defaultData)
           setFeatures([])
           showmodal()
+          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           checkboxForm.checked = false
+          captcha.current.reset()
         } else {
           // console.log(obtainM2value)
           checkboxForm.checked = false
+          captcha.current.reset()
+          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, metros: formData.metros })
           setFeatures(obtainM2value.data.features)
           setLoad(false)
         }
 
       } else {
         showmodal()
-        setFormData(defaultData)
+        setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
+        checkboxForm.checked = false
+        captcha.current.reset()
       }
 
     } catch (error) {
@@ -205,7 +211,7 @@ function App() {
 
   return (
     <>
-      
+
       <main>
 
         <div className="contact-form">
@@ -298,8 +304,8 @@ function App() {
                   <div className="d-grid gap-2 col-12">
                     {
                       load ? <>
-                        <div className="col-12 p-0 d-flex justify-content-center">
-                          <Sipinner />
+                        <div className='col-12 p-0 mb-1 d-flex justify-content-center'>
+                          <Spinner2 />
                         </div>
                       </> :
                         <>
@@ -308,7 +314,6 @@ function App() {
                           </div>
                         </>
                     }
-
                   </div>
 
                 </div>
