@@ -31,7 +31,7 @@ function App() {
   const fetchPOT = React.useRef(null)
   const captcha = React.useRef(null)
 
-  // console.log(formData)
+  // console.log(features)
 
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
@@ -85,7 +85,7 @@ function App() {
     setLoad(true)
     const newErrors = {}
 
-    console.log(formData)
+    // console.log(formData)
 
     if (formData.matricula === "") newErrors.matricula = 'Debes indicar la matricula del terreno para poder realizar la consulta.';
     if (formData.metros === "") newErrors.metros = 'Debes especificar la cantidad de metros a consultar.';
@@ -190,7 +190,7 @@ function App() {
           // console.log(obtainM2value)
           checkboxForm.checked = false
           captcha.current.reset()
-          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, metros: formData.metros })
+          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
           setFeatures(obtainM2value.data.features)
           setLoad(false)
         }
@@ -316,6 +316,14 @@ function App() {
                     }
                   </div>
 
+                  {
+                    features.length >= 2 && (
+                      <div className="d-grid gap-2 col-12">
+                        <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
+                      </div>
+                    )
+                  }
+
                 </div>
               </div>
             </form>
@@ -328,6 +336,7 @@ function App() {
               <div className="contact-form-box__left">
                 <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
                   <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
                   <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
                   <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
@@ -369,6 +378,7 @@ function App() {
                 <div className="contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
                     <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
                     <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
                     <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
@@ -498,11 +508,12 @@ function App() {
           }
 
           {
-            features.length > 2 && (
+            features.length >= 2 && (
               <>
                 <div className="contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
+                  <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
                     <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
                     <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
                     <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
@@ -532,10 +543,6 @@ function App() {
 
                   </ul>
 
-                </div>
-
-                <div className='mt-2 mb-2'>
-                  <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
                 </div>
               </>
             )
