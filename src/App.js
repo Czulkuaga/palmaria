@@ -27,6 +27,7 @@ function App() {
   // const [dir, setDir] = React.useState(null)
   const [cbml, setCbml] = React.useState(null)
   const [features, setFeatures] = React.useState([])
+  const [modalMessage, setModalMessage] = React.useState(null)
 
   const fetchPOT = React.useRef(null)
   const captcha = React.useRef(null)
@@ -150,6 +151,7 @@ function App() {
           setFeatures([])
           captcha.current.reset()
           checkboxForm.checked = false
+          setModalMessage("Las consulta de la matricula no devolvió resulltados")
           showmodal()
           return
         }
@@ -161,6 +163,7 @@ function App() {
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
           checkboxForm.checked = false
+          setModalMessage("Hubo un error al devolver la información")
           showmodal()
           return
         }
@@ -182,17 +185,28 @@ function App() {
           setLoad(false)
           setFormData(defaultData)
           setFeatures([])
+          setModalMessage("Hubo un error al devolver los resultados")
           showmodal()
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           checkboxForm.checked = false
           captcha.current.reset()
         } else {
           // console.log(obtainM2value)
-          checkboxForm.checked = false
-          captcha.current.reset()
-          setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
-          setFeatures(obtainM2value.data.features)
-          setLoad(false)
+          if (obtainM2value.data.features.length >= 2) {
+            checkboxForm.checked = false
+            captcha.current.reset()
+            setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
+            showmodal()
+            setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
+            setFeatures(obtainM2value.data.features)
+            setLoad(false)
+          } else {
+            checkboxForm.checked = false
+            captcha.current.reset()
+            setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
+            setFeatures(obtainM2value.data.features)
+            setLoad(false)
+          }
         }
 
       } else {
@@ -513,7 +527,7 @@ function App() {
                 <div className="contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
-                  <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
+                    <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
                     <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
                     <li className="list-group-item">Código catastral <span className="float-end"><strong>*cbml*</strong></span></li>
                     <li className="list-group-item">M2 calculados <span className="float-end"><strong>0</strong></span></li>
@@ -554,7 +568,7 @@ function App() {
           Launch demo modal
         </button>
 
-        <ModalInfo message={"No hay datos para mostrar"} />
+        <ModalInfo message={modalMessage} />
 
       </main>
     </>
