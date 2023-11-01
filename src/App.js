@@ -6,6 +6,7 @@ import ApiService from './Service/ApiService'
 import ModalInfo from './Components/ModalInfo'
 import ReCAPTCHA from "react-google-recaptcha"
 import Spinner2 from './Components/Spinner2';
+import { Events, animateScroll as scroll, scrollSpy } from "react-scroll";
 
 const defaultData = {
   fullname: "",
@@ -31,6 +32,7 @@ function App() {
 
   const fetchPOT = React.useRef(null)
   const captcha = React.useRef(null)
+  // const componentForm = React.useRef(null)
 
   // console.log(features)
 
@@ -41,6 +43,9 @@ function App() {
   let validEmail = /^[A-Za-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[A-Za-z0-9*+/={|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/g
 
   const checkboxForm = document.getElementById("exampleCheck1");
+
+  const widthWindow = window.innerWidth
+  // console.log(widthWindow)
 
   const showmodal = () => {
     const btnmodal = document.getElementById('btn-showModal')
@@ -201,11 +206,13 @@ function App() {
             setFeatures(obtainM2value.data.features)
             setLoad(false)
           } else {
+            if(widthWindow < 768) scroll.scrollMore(550)
             checkboxForm.checked = false
             captcha.current.reset()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
             setFeatures(obtainM2value.data.features)
             setLoad(false)
+
           }
         }
 
@@ -222,6 +229,28 @@ function App() {
       setFormData(defaultData)
     }
   }
+
+  React.useEffect(() => {
+
+    // Registering the 'begin' event and logging it to the console when triggered.
+    Events.scrollEvent.register('begin', (to, element) => {
+      // console.log('begin', to, element);
+    });
+
+    // Registering the 'end' event and logging it to the console when triggered.
+    Events.scrollEvent.register('end', (to, element) => {
+      // console.log('end', to, element);
+    });
+
+    // Updating scrollSpy when the component mounts.
+    scrollSpy.update();
+
+    // Returning a cleanup function to remove the registered events when the component unmounts.
+    return () => {
+      Events.scrollEvent.remove('begin');
+      Events.scrollEvent.remove('end');
+    };
+  }, []);
 
   return (
     <>
@@ -385,7 +414,6 @@ function App() {
           }
 
           {/* Fin sin Búsqueda */}
-
           {
             features.length < 2 && features.map((feature, index) => (
               <React.Fragment key={index}>
@@ -423,100 +451,6 @@ function App() {
 
                 </div>
 
-                {/* inicio simulador mobile collapse */}
-
-                {/* <div className="mt-5 d-md-none d-block">
-                  <div className=" mt-n5">
-                    <div className="container px-1 z-index-sec">
-
-                      <div className="row g-0 ">
-
-                        <div className="col-md-4">
-                          <div className="card shadow-lg borde px-1 py-2 mb-4">
-                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                              <div className="d-flex flex-row align-items-center ">
-                                <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                                <div className=" c-details">
-                                  <h6 className="mb-0 text-primary title-detalle-mobile">Calculo obligación</h6>
-                                </div>
-                              </div>
-                              <div className="text-primary price-mobile"> <span><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span> </div>
-                            </div>
-                            <div className="mt-2">
-                              <div className="row px-1">
-                                <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Comuna</p> <span className="fw-semibold font-dates">{feature.attributes.COMUNA}</span></div>
-                                <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Cód catastral</p> <span className="fw-semibold font-dates">*{cbml}*</span></div>
-                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">M2 lote</p> <span className="fw-semibold font-dates">{formData.metros}</span></div>
-                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Valor M2 </p> <span className="fw-semibold font-dates">$ {addDotThousands(feature.attributes.VALOR_M2)}</span></div>
-                              </div>
-                              <div className="mt-2">
-                                <div className="progress">
-                                  <div className="bg-secondary-subtle" role="progressbar" style={{ width: '100%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="col-md-4">
-                          <div className="card shadow-lg borde px-1 py-2 mb-4">
-                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                              <div className="d-flex flex-row align-items-center ">
-                                <div className=""> <img className="me-2" style={{ width: '38px' }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" /> </div>
-                                <div className=" c-details">
-                                  <h6 className="mb-0 text-efectivo title-detalle-mobile">PAGO EN EFECTIVO</h6>
-                                </div>
-                              </div>
-                              <div className="text-efectivo price-mobile"> <span><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span> </div>
-                            </div>
-                            <div className="mt-2">
-                              <div className="row px-1">
-                                <div className="col text-center py-1 px-0 "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</span></div>
-                                <div className="col-auto text-center py-1 px-0"><p className="mb-1 fw-light p-14">Recargo efectivo</p> <span className="fw-semibold font-dates text-danger">+15%</span></div>
-                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Recargo total</p> <span className="fw-semibold font-dates text-danger">$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</span></div>
-                              </div>
-                              <div className="mt-2">
-                                <div className="progress">
-                                  <div className="bg-secondary-subtle" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="col-md-4">
-                          <div className="card shadow-lg borde px-2 py-1 mb-4">
-                            <div className="d-flex justify-content-between border-bottom border-dark-subtle pb-1 ">
-                              <div className="d-flex flex-row align-items-center ">
-                                <div className=""> <img className="me-2" style={{ width: "28px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" /> </div>
-                                <div className=" c-details">
-                                  <h6 className="mb-0 text-success title-detalle-mobile fw-bold  ">PAGO CON PALMARIA</h6>
-                                </div>
-                              </div>
-                              <div className="text-success price-mobile fs-5 fw-bold"> <span><strong>$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span> </div>
-                            </div>
-                            <div className="mt-2">
-                              <div className="row px-0">
-                                <div className="col text-center py-1  "><p className="mb-1 fw-light p-14">Total</p> <span className="fw-semibold font-dates">$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</span></div>
-                                <div className="col text-center py-1 px-0"><p className="mb-1 fw-light p-14">Efectivo</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Adicional</p> <span className="fw-semibold font-dates text-success">-15%</span></div>
-                                <div className="col text-center py-1"><p className="mb-1 fw-light p-14">Des Total </p> <span className="fw-semibold font-dates text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</span></div>
-                              </div>
-                              <div className="mt-2">
-                                <div className="progress">
-                                  <div className="progress-bar bg-success" role="progressbar" style={{ width: "100%" }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* fin simulador mobile collapse */}
               </React.Fragment>
             ))
           }
@@ -570,7 +504,7 @@ function App() {
 
         <ModalInfo message={modalMessage} />
 
-      </main>
+      </main >
     </>
   );
 }
