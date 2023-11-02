@@ -252,24 +252,10 @@ function App() {
     };
   }, []);
 
-  const handleSetActive = (to) => {
-    console.log(to);
-  };
-
   return (
     <>
-      <Link
-        activeClass="active"
-        to="ContainerElementForm"
-        spy={true}
-        smooth={true}
-        offset={50}
-        duration={500}
-        onSetActive={handleSetActive}
-      >
-        Test 1
-      </Link>
       <main>
+      <a href='#containerFormData'>test scroll</a>
 
         <div className="contact-form">
 
@@ -429,13 +415,11 @@ function App() {
 
           {/* Fin sin Búsqueda */}
 
-          <Element name="ContainerElementForm" style={{width:'100%', marginBottom:'10px', backgroundColor:'red'}}>
             {
-
               features.length < 2 && features.map((feature, index) => (
-                <React.Fragment key={index} id="ContainerElementForm">
+                <React.Fragment key={index}>
 
-                  <div className="contact-form-box__left">
+                  <div className="contact-form-box__left" id='containerFormData'>
                     <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                     <ul className="list-group list-group-flush list-simulador mb-4">
                       <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
@@ -473,8 +457,6 @@ function App() {
               ))
 
             }
-          </Element>
-
 
           {
             features.length >= 2 && (
