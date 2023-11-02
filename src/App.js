@@ -206,7 +206,7 @@ function App() {
             setFeatures(obtainM2value.data.features)
             setLoad(false)
           } else {
-            if(widthWindow < 768) scroll.scrollMore(550)
+            if(widthWindow < 768) scroll.scrollToBottom()
             checkboxForm.checked = false
             captcha.current.reset()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
