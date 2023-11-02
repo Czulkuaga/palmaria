@@ -6,7 +6,7 @@ import ApiService from './Service/ApiService'
 import ModalInfo from './Components/ModalInfo'
 import ReCAPTCHA from "react-google-recaptcha"
 import Spinner2 from './Components/Spinner2';
-import { Events, animateScroll as scroll, scrollSpy } from "react-scroll";
+import { Events, animateScroll as scroll, scrollSpy, Element, Link } from "react-scroll";
 
 const defaultData = {
   fullname: "",
@@ -206,7 +206,7 @@ function App() {
             setFeatures(obtainM2value.data.features)
             setLoad(false)
           } else {
-            if(widthWindow < 768) scroll.scrollToBottom()
+            // if (widthWindow < 768) scroll.scrollToBottom()
             checkboxForm.checked = false
             captcha.current.reset()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
@@ -252,9 +252,23 @@ function App() {
     };
   }, []);
 
+  const handleSetActive = (to) => {
+    console.log(to);
+  };
+
   return (
     <>
-
+      <Link
+        activeClass="active"
+        to="ContainerElementForm"
+        spy={true}
+        smooth={true}
+        offset={50}
+        duration={500}
+        onSetActive={handleSetActive}
+      >
+        Test 1
+      </Link>
       <main>
 
         <div className="contact-form">
@@ -414,46 +428,53 @@ function App() {
           }
 
           {/* Fin sin Búsqueda */}
-          {
-            features.length < 2 && features.map((feature, index) => (
-              <React.Fragment key={index}>
-                <div className="contact-form-box__left">
-                  <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
-                  <ul className="list-group list-group-flush list-simulador mb-4">
-                    <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
-                    <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                    <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
-                    <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                    <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
-                    <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
 
-                  </ul>
+          <Element name="ContainerElementForm" style={{width:'100%', marginBottom:'10px', backgroundColor:'red'}}>
+            {
 
+              features.length < 2 && features.map((feature, index) => (
+                <React.Fragment key={index} id="ContainerElementForm">
 
-                  <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
-                  <ul className="list-group list-group-flush list-simulador mb-4">
-                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
-                    <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
-                  </ul>
+                  <div className="contact-form-box__left">
+                    <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                    <ul className="list-group list-group-flush list-simulador mb-4">
+                      <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
+                      <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                      <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
+                      <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                      <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+                      <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
+
+                    </ul>
 
 
-                  <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
-                  <ul className="list-group list-group-flush list-simulador mb-4">
-                    <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                    <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                    <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
-                    <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
+                    <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                    <ul className="list-group list-group-flush list-simulador mb-4">
+                      <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                      <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                      <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+                      <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
+                    </ul>
 
-                  </ul>
 
-                </div>
+                    <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                    <ul className="list-group list-group-flush list-simulador mb-4">
+                      <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                      <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                      <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                      <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                      <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
 
-              </React.Fragment>
-            ))
-          }
+                    </ul>
+
+                  </div>
+
+                </React.Fragment>
+              ))
+
+            }
+          </Element>
+
 
           {
             features.length >= 2 && (
