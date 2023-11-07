@@ -496,7 +496,7 @@ function App() {
           {/* Sin Búsqueda */}
 
           {
-            features.length === 0 && (
+            widthWindow > 768 && features.length === 0 && (
               <div className="d-sm-none d-lg-block contact-form-box__left">
                 <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
@@ -626,7 +626,7 @@ function App() {
           }
 
           {
-             widthWindow > 768 && features.length >= 2 && (
+            widthWindow > 768 && features.length >= 2 && (
               <>
                 <div className="d-sm-none d-lg-block contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
