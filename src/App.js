@@ -158,10 +158,10 @@ function App() {
           setLoad(false)
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
-          captcha.current.reset()
-          captchaFW.current.reset()
-          checkboxForm.checked = false
-          checkboxFormFW.checked = false
+          if(captcha.current) captcha.current.reset()
+          if(captchaFW.current) captchaFW.current.reset()
+          if(checkboxForm) checkboxForm.checked = false
+          if(checkboxFormFW) checkboxFormFW.checked = false
           setModalMessage("Las consulta de la matricula no devolvió resulltados")
           showmodal()
           return
@@ -173,10 +173,10 @@ function App() {
           setLoad(false)
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
-          checkboxForm.checked = false
-          checkboxFormFW.checked = false
-          captcha.current.reset()
-          captchaFW.current.reset()
+          if(captcha.current) captcha.current.reset()
+          if(captchaFW.current) captchaFW.current.reset()
+          if(checkboxForm) checkboxForm.checked = false
+          if(checkboxFormFW) checkboxFormFW.checked = false
           setModalMessage("Hubo un error al devolver la información")
           showmodal()
           return
@@ -202,17 +202,17 @@ function App() {
           setModalMessage("Hubo un error al devolver los resultados")
           showmodal()
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
-          checkboxForm.checked = false
-          checkboxFormFW.checked = false
-          captcha.current.reset()
-          captchaFW.current.reset()
+          if(captcha.current) captcha.current.reset()
+          if(captchaFW.current) captchaFW.current.reset()
+          if(checkboxForm) checkboxForm.checked = false
+          if(checkboxFormFW) checkboxFormFW.checked = false
         } else {
           // console.log(obtainM2value)
           if (obtainM2value.data.features.length >= 2) {
-            checkboxForm.checked = false
-            checkboxFormFW.checked = false
-            captcha.current.reset()
-            captchaFW.current.reset()
+            if(captcha.current) captcha.current.reset()
+            if(captchaFW.current) captchaFW.current.reset()
+            if(checkboxForm) checkboxForm.checked = false
+            if(checkboxFormFW) checkboxFormFW.checked = false
             setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
             showmodal()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
@@ -220,10 +220,10 @@ function App() {
             setLoad(false)
           } else {
             // if (widthWindow < 768) scroll.scrollToBottom()
-            checkboxForm.checked = false
-            checkboxFormFW.checked = false
-            captcha.current.reset()
-            captchaFW.current.reset()
+            if(captcha.current) captcha.current.reset()
+            if(captchaFW.current) captchaFW.current.reset()
+            if(checkboxForm) checkboxForm.checked = false
+            if(checkboxFormFW) checkboxFormFW.checked = false
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
             setFeatures(obtainM2value.data.features)
             handlerDisplayModal()
@@ -236,10 +236,10 @@ function App() {
         setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
         showmodal()
         setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
-        checkboxForm.checked = false
-        checkboxFormFW.checked = false
-        captcha.current.reset()
-        captchaFW.current.reset()
+        if(captcha.current) captcha.current.reset()
+        if(captchaFW.current) captchaFW.current.reset()
+        if(checkboxForm) checkboxForm.checked = false
+        if(checkboxFormFW) checkboxFormFW.checked = false
       }
 
     } catch (error) {
@@ -248,10 +248,10 @@ function App() {
       setFormData(defaultData)
       setModalMessage("Hubo un error al traer la consulta, por favor contactese con nosotros.")
       showmodal()
-      checkboxForm.checked = false
-      checkboxFormFW.checked = false
-      captcha.current.reset()
-      captchaFW.current.reset()
+      if(captcha.current) captcha.current.reset()
+      if(captchaFW.current) captchaFW.current.reset()
+      if(checkboxForm) checkboxForm.checked = false
+      if(checkboxFormFW) checkboxFormFW.checked = false
     }
   }
 
@@ -536,6 +536,7 @@ function App() {
 
           {/* Fin sin Búsqueda */}
 
+          {/* Con Búsqueda, features < 2 */}
           {
             features.length < 2 && features.map((feature, index) => (
               <React.Fragment key={index}>
@@ -622,9 +623,10 @@ function App() {
 
               </React.Fragment>
             ))
-
           }
+          {/* Fin Con Búsqueda, features < 2 */}
 
+          {/* Con Búsqueda, features >= 2 */}
           {
             widthWindow > 768 && features.length >= 2 && (
               <>
@@ -665,7 +667,7 @@ function App() {
               </>
             )
           }
-
+          {/* Fin Con Búsqueda, features >= 2 */}
         </div>
 
         <button hidden id='btn-showModal' type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
