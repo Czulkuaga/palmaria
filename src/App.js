@@ -6,7 +6,6 @@ import ApiService from './Service/ApiService'
 import ModalInfo from './Components/ModalInfo'
 import ReCAPTCHA from "react-google-recaptcha"
 import Spinner2 from './Components/Spinner2';
-import { Events, animateScroll as scroll, scrollSpy, Element, Link } from "react-scroll";
 
 const defaultData = {
   fullname: "",
@@ -29,9 +28,10 @@ function App() {
   const [cbml, setCbml] = React.useState(null)
   const [features, setFeatures] = React.useState([])
   const [modalMessage, setModalMessage] = React.useState(null)
+  const [displayForm, setDisplayForm] = React.useState(true)
 
-  const fetchPOT = React.useRef(null)
   const captcha = React.useRef(null)
+  const captchaFW = React.useRef(null)
   // const componentForm = React.useRef(null)
 
   // console.log(features)
@@ -43,13 +43,17 @@ function App() {
   let validEmail = /^[A-Za-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[A-Za-z0-9*+/={|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/g
 
   const checkboxForm = document.getElementById("exampleCheck1");
+  const checkboxFormFW = document.getElementById("exampleCheck1FW")
 
-  const widthWindow = window.innerWidth
   // console.log(widthWindow)
 
   const showmodal = () => {
     const btnmodal = document.getElementById('btn-showModal')
     btnmodal.click()
+  }
+
+  const handlerDisplayModal = () => {
+    setDisplayForm(!displayForm)
   }
 
   const fetchCaptcha = async (value) => {
@@ -155,7 +159,9 @@ function App() {
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
           captcha.current.reset()
+          captchaFW.current.reset()
           checkboxForm.checked = false
+          checkboxFormFW.checked = false
           setModalMessage("Las consulta de la matricula no devolvió resulltados")
           showmodal()
           return
@@ -168,6 +174,9 @@ function App() {
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
           checkboxForm.checked = false
+          checkboxFormFW.checked = false
+          captcha.current.reset()
+          captchaFW.current.reset()
           setModalMessage("Hubo un error al devolver la información")
           showmodal()
           return
@@ -194,12 +203,16 @@ function App() {
           showmodal()
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           checkboxForm.checked = false
+          checkboxFormFW.checked = false
           captcha.current.reset()
+          captchaFW.current.reset()
         } else {
           // console.log(obtainM2value)
           if (obtainM2value.data.features.length >= 2) {
             checkboxForm.checked = false
+            checkboxFormFW.checked = false
             captcha.current.reset()
+            captchaFW.current.reset()
             setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
             showmodal()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
@@ -208,60 +221,49 @@ function App() {
           } else {
             // if (widthWindow < 768) scroll.scrollToBottom()
             checkboxForm.checked = false
+            checkboxFormFW.checked = false
             captcha.current.reset()
+            captchaFW.current.reset()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
             setFeatures(obtainM2value.data.features)
+            handlerDisplayModal()
             setLoad(false)
 
           }
         }
 
       } else {
+        setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
         showmodal()
         setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
         checkboxForm.checked = false
+        checkboxFormFW.checked = false
         captcha.current.reset()
+        captchaFW.current.reset()
       }
 
     } catch (error) {
       setLoad(false)
       console.log(error)
       setFormData(defaultData)
+      setModalMessage("Hubo un error al traer la consulta, por favor contactese con nosotros.")
+      showmodal()
+      checkboxForm.checked = false
+      checkboxFormFW.checked = false
+      captcha.current.reset()
+      captchaFW.current.reset()
     }
   }
-
-  React.useEffect(() => {
-
-    // Registering the 'begin' event and logging it to the console when triggered.
-    Events.scrollEvent.register('begin', (to, element) => {
-      // console.log('begin', to, element);
-    });
-
-    // Registering the 'end' event and logging it to the console when triggered.
-    Events.scrollEvent.register('end', (to, element) => {
-      // console.log('end', to, element);
-    });
-
-    // Updating scrollSpy when the component mounts.
-    scrollSpy.update();
-
-    // Returning a cleanup function to remove the registered events when the component unmounts.
-    return () => {
-      Events.scrollEvent.remove('begin');
-      Events.scrollEvent.remove('end');
-    };
-  }, []);
 
   return (
     <>
       <main>
-      <button><a href='#containerFormData'>test</a></button>
 
         <div className="contact-form">
 
-          <div className="contact-form-box__right">
+          <div className={"d-sm-none d-lg-block contact-form-box__right"}>
 
-            <form ref={fetchPOT} onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)}>
 
               <div className="container">
                 <div className="row">
@@ -322,7 +324,7 @@ function App() {
 
                   <div className="col-12 col-md-6 mb-4">
                     <ReCAPTCHA
-                      ref={captcha}
+                      ref={captchaFW}
                       sitekey={SITE_KEY}
                       onChange={fetchCaptcha}
                       className='captch-style'
@@ -336,7 +338,7 @@ function App() {
 
                   <div className="col-12 mt-1">
                     <div className="mb-3 form-check ms-2 text-start ">
-                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1" />
+                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1FW" />
                       <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
                       {
                         errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
@@ -371,12 +373,128 @@ function App() {
               </div>
             </form>
           </div>
+          {
+            displayForm && (
+              <div className={"d-lg-none contact-form-box__right"}>
+
+                <form onSubmit={(e) => handleSubmit(e)}>
+
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-12">
+                        <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
+                        <hr />
+                        <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
+                      </div>
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
+                          <label htmlFor="fullname" className="floating-label">Nombres y Apellidos*</label>
+                          {
+                            errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
+                          }
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
+                          <label htmlFor="email" className="floating-label">Correo Electonico*</label>
+                          {
+                            errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
+                          <label htmlFor="phone" className="floating-label">Número Celular*</label>
+                          {
+                            errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
+                          <label htmlFor="matricula" className="floating-label"> Número de matricula*</label>
+                          {
+                            errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
+                          <label htmlFor="metros" className="floating-label"> M2 del lote*</label>
+                          {
+                            errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
+                          }
+                        </div>
+                      </div>
+
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <ReCAPTCHA
+                          ref={captcha}
+                          sitekey={SITE_KEY}
+                          onChange={fetchCaptcha}
+                          className='captch-style'
+                        />
+                        {
+                          errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
+                        }
+                      </div>
+
+
+
+                      <div className="col-12 mt-1">
+                        <div className="mb-3 form-check ms-2 text-start ">
+                          <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1" />
+                          <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
+                          {
+                            errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="d-grid gap-2 col-12">
+                        {
+                          load ? <>
+                            <div className='col-12 p-0 mb-1 d-flex justify-content-center'>
+                              <Spinner2 />
+                            </div>
+                          </> :
+                            <>
+                              <div className="col-12 p-0 mb-5 d-flex justify-content-center">
+                                <button type='submit' className="btn btn-green rounded-pill py-3 px-5 mt-4">Calcular</button>
+                              </div>
+                            </>
+                        }
+                      </div>
+
+                      {
+                        features.length >= 2 && (
+                          <div className="d-grid gap-2 col-12">
+                            <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
+                          </div>
+                        )
+                      }
+
+                    </div>
+                  </div>
+                </form>
+              </div>
+            )
+          }
 
           {/* Sin Búsqueda */}
 
           {
             features.length === 0 && (
-              <div className="contact-form-box__left">
+              <div className="d-sm-none d-lg-block contact-form-box__left">
                 <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
                   <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
@@ -415,53 +533,95 @@ function App() {
 
           {/* Fin sin Búsqueda */}
 
-            {
-              features.length < 2 && features.map((feature, index) => (
-                <React.Fragment key={index}>
+          {
+            features.length < 2 && features.map((feature, index) => (
+              <React.Fragment key={index}>
+                <div className="d-sm-none d-lg-block contact-form-box__left" id='containerFormData'>
+                  <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
+                    <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                    <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
+                    <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                    <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+                    <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
 
-                  <div className="contact-form-box__left" id='containerFormData'>
-                    <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
-                    <ul className="list-group list-group-flush list-simulador mb-4">
-                      <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
-                      <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
-                      <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
-                      <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
-                      <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
-                      <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
-
-                    </ul>
-
-
-                    <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
-                    <ul className="list-group list-group-flush list-simulador mb-4">
-                      <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
-                      <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
-                      <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
-                      <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
-                    </ul>
+                  </ul>
 
 
-                    <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
-                    <ul className="list-group list-group-flush list-simulador mb-4">
-                      <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
-                      <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                      <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
-                      <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
-                      <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
+                  <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                    <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
+                  </ul>
 
-                    </ul>
 
-                  </div>
+                  <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                  <ul className="list-group list-group-flush list-simulador mb-4">
+                    <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                    <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                    <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
 
-                </React.Fragment>
-              ))
+                  </ul>
 
-            }
+                </div>
+                {
+                  !displayForm &&
+                  (
+                    <>
+                      <div>
+                        <button className='btn btn-back d-sm-block d-lg-none' onClick={() => handlerDisplayModal()}>Volver</button>
+                      </div>
+                      <div className="d-sm-block d-lg-none contact-form-box__left" id='containerFormData'>
+                        <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
+                          <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
+                          <li className="list-group-item">Código catastral <span className="float-end"><strong>*{cbml}*</strong></span></li>
+                          <li className="list-group-item">M2 calculados <span className="float-end"><strong>{formData.metros}</strong></span></li>
+                          <li className="list-group-item">Valor por m2<span className="float-end"><strong>$ {addDotThousands(feature.attributes.VALOR_M2)}</strong></span></li>
+                          <li className="list-group-item"><strong>Total obligaciones</strong><span className="float-end"><strong>$ {addDotThousands(parseInt(feature.attributes.VALOR_M2 * parseFloat(formData.metros)))}</strong></span></li>
+
+                        </ul>
+
+
+                        <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
+                          <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
+                          <li className="list-group-item">Total recargo <span className="float-end"><strong>$ {addDotThousands((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15).toFixed(2))}</strong></span></li>
+                          <li className="list-group-item"><strong>Total pago en efectivo</strong><span className="float-end"><strong>$ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)))}</strong></span></li>
+                        </ul>
+
+
+                        <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                        <ul className="list-group list-group-flush list-simulador mb-4">
+                          <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.VALOR_M2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
+                          <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                          <li className="list-group-item">Descuento obligaciones <span className="float-end"><strong className="text-success">-15%</strong></span></li>
+                          <li className="list-group-item">Descuento total <span className="float-end"><strong className="text-success">$ {addDotThousands(((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)).toFixed(2))}</strong></span></li>
+                          <li className="list-group-item"><strong>Total pago de obligaciones</strong><span className="float-end"><strong className="text-success">$ {addDotThousands(parseInt(((feature.attributes.VALOR_M2 * parseFloat(formData.metros)) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15)) - ((feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15) + (feature.attributes.VALOR_M2 * parseFloat(formData.metros) * 0.15))))}</strong></span></li>
+
+                        </ul>
+
+                      </div>
+                    </>
+                  )
+                }
+
+              </React.Fragment>
+            ))
+
+          }
 
           {
             features.length >= 2 && (
               <>
-                <div className="contact-form-box__left">
+                <div className="d-sm-none d-lg-block contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                   <ul className="list-group list-group-flush list-simulador mb-4">
                     <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>

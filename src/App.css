@@ -1291,7 +1291,7 @@ p {
 
 .contact-form-box__left {
   background: #e7e7e7;
-  background-image: url(http://127.0.0.1:49400/images/bg.jpg);
+  /* background-image: url(http://127.0.0.1:49400/images/bg.jpg); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1550,6 +1550,11 @@ p {
 .btn-green:hover{
   background-color: #83a700;
   color: #ffffff
+}
+
+.btn-back {
+  background-color: #e7e7e7;
+  color: #676767;
 }
 
 .captch-style{
