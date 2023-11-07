@@ -34,8 +34,8 @@ function App() {
   const captchaFW = React.useRef(null)
   // const componentForm = React.useRef(null)
 
-  // console.log(features)
-
+  const widthWindow = window.innerWidth
+  // console.log(widthWindow)
   //RegExp
   const validarMatricula = /^[0-9]{1,8}$/g
   const validarMetros = /^\d+(?:[.]\d+)?$/g
@@ -260,121 +260,124 @@ function App() {
       <main>
 
         <div className="contact-form">
-
-          <div className={"d-sm-none d-lg-block contact-form-box__right"}>
-
-            <form onSubmit={(e) => handleSubmit(e)}>
-
-              <div className="container">
-                <div className="row">
-                  <div className="col-12">
-                    <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
-                    <hr />
-                    <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
-                  </div>
-                  <div className="col-12 col-md-6 mb-4">
-                    <div className="floating-label-wrap ">
-                      <input autoComplete='none' name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
-                      <label htmlFor="fullname" className="floating-label">Nombres y Apellidos*</label>
-                      {
-                        errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
-                      }
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6 mb-4">
-                    <div className="floating-label-wrap ">
-                      <input autoComplete='none' name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
-                      <label htmlFor="email" className="floating-label">Correo Electonico*</label>
-                      {
-                        errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
-                      }
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 mb-4">
-                    <div className="floating-label-wrap ">
-                      <input autoComplete='none' name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
-                      <label htmlFor="phone" className="floating-label">Número Celular*</label>
-                      {
-                        errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
-                      }
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 mb-4">
-                    <div className="floating-label-wrap ">
-                      <input autoComplete='none' name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
-                      <label htmlFor="matricula" className="floating-label"> Número de matricula*</label>
-                      {
-                        errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
-                      }
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 mb-4">
-                    <div className="floating-label-wrap ">
-                      <input autoComplete='none' name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
-                      <label htmlFor="metros" className="floating-label"> M2 del lote*</label>
-                      {
-                        errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
-                      }
-                    </div>
-                  </div>
-
-
-                  <div className="col-12 col-md-6 mb-4">
-                    <ReCAPTCHA
-                      ref={captchaFW}
-                      sitekey={SITE_KEY}
-                      onChange={fetchCaptcha}
-                      className='captch-style'
-                    />
-                    {
-                      errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
-                    }
-                  </div>
-
-
-
-                  <div className="col-12 mt-1">
-                    <div className="mb-3 form-check ms-2 text-start ">
-                      <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1FW" />
-                      <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
-                      {
-                        errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
-                      }
-                    </div>
-                  </div>
-
-                  <div className="d-grid gap-2 col-12">
-                    {
-                      load ? <>
-                        <div className='col-12 p-0 mb-1 d-flex justify-content-center'>
-                          <Spinner2 />
-                        </div>
-                      </> :
-                        <>
-                          <div className="col-12 p-0 mb-5 d-flex justify-content-center">
-                            <button type='submit' className="btn btn-green rounded-pill py-3 px-5 mt-4">Calcular</button>
-                          </div>
-                        </>
-                    }
-                  </div>
-
-                  {
-                    features.length >= 2 && (
-                      <div className="d-grid gap-2 col-12">
-                        <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
-                      </div>
-                    )
-                  }
-
-                </div>
-              </div>
-            </form>
-          </div>
           {
-            displayForm && (
+            widthWindow > 768 && (
+              <div className="contact-form-box__right">
+
+                <form onSubmit={(e) => handleSubmit(e)}>
+
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-12">
+                        <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
+                        <hr />
+                        <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
+                      </div>
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={'fullname'} value={formData.fullname} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="fullname" placeholder="fullname" />
+                          <label htmlFor="fullname" className="floating-label">Nombres y Apellidos*</label>
+                          {
+                            errors.fullname ? <div id="fullanmeHelp" className="form-text text-danger text-shadow text-start">{errors.fullname}</div> : <div id="fullnameHelp" className="form-text text-white text-start"></div>
+                          }
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"email"} value={formData.email} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="email" placeholder="email" />
+                          <label htmlFor="email" className="floating-label">Correo Electonico*</label>
+                          {
+                            errors.email ? <div id="emailHelp" className="form-text text-danger text-shadow text-start">{errors.email}</div> : <div id="emailHelp" className="form-text text-white text-start"> </div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"phone"} value={formData.phone} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="phone" placeholder="phone" />
+                          <label htmlFor="phone" className="floating-label">Número Celular*</label>
+                          {
+                            errors.phone ? <div id="phoneHelp" className="form-text text-danger text-shadow text-start">{errors.phone}</div> : <div id="phoneHelp" className="form-text text-white text-start"> </div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"matricula"} value={formData.matricula} onChange={(e) => inputChangeHandler(e)} type="number" className="floating-label-field floating-label-field--s1" id="matricula" placeholder="matricula" />
+                          <label htmlFor="matricula" className="floating-label"> Número de matricula*</label>
+                          {
+                            errors.matricula ? <div id="numMatriculaHelp" className="form-text text-danger text-shadow text-start">{errors.matricula}</div> : <div id="numMatriculaHelp" className="form-text text-white text-start"> Sólo se permiten valores numéricos.</div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <div className="floating-label-wrap ">
+                          <input autoComplete='none' name={"metros"} value={formData.metros} onChange={(e) => inputChangeHandler(e)} type="text" className="floating-label-field floating-label-field--s1" id="metros" placeholder="metros" />
+                          <label htmlFor="metros" className="floating-label"> M2 del lote*</label>
+                          {
+                            errors.metros ? <div id="metrosHelp" className="form-text text-danger text-shadow text-start">{errors.metros}</div> : <div id="metrosHelp" className="form-text text-white text-start">Valor numérico de metros cuadrados </div>
+                          }
+                        </div>
+                      </div>
+
+
+                      <div className="col-12 col-md-6 mb-4">
+                        <ReCAPTCHA
+                          ref={captchaFW}
+                          sitekey={SITE_KEY}
+                          onChange={fetchCaptcha}
+                          className='captch-style'
+                        />
+                        {
+                          errors.captcha && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.captcha}</div>
+                        }
+                      </div>
+
+
+
+                      <div className="col-12 mt-1">
+                        <div className="mb-3 form-check ms-2 text-start ">
+                          <input name={"acept"} onChange={(e) => inputChangeHandler(e)} type="checkbox" className="form-check-input " id="exampleCheck1FW" />
+                          <label className="form-check-label" htmlFor="exampleCheck1">He leído y acepto los <a className="" target="_blank" rel="noreferrer" href="https://obligacionesurbanisticas.co/wp-content/uploads/2023/10/Terminos-y-condiciones-de-uso-sitio-web.pdf">términos y condiciones de uso</a></label>
+                          {
+                            errors.acept && <div id="metrosHelp" className="form-text text-danger text-shadow">{errors.acept}</div>
+                          }
+                        </div>
+                      </div>
+
+                      <div className="d-grid gap-2 col-12">
+                        {
+                          load ? <>
+                            <div className='col-12 p-0 mb-1 d-flex justify-content-center'>
+                              <Spinner2 />
+                            </div>
+                          </> :
+                            <>
+                              <div className="col-12 p-0 mb-5 d-flex justify-content-center">
+                                <button type='submit' className="btn btn-green rounded-pill py-3 px-5 mt-4">Calcular</button>
+                              </div>
+                            </>
+                        }
+                      </div>
+
+                      {
+                        features.length >= 2 && (
+                          <div className="d-grid gap-2 col-12">
+                            <p>Por el momento no se puede mostrar la información, por favor contáctese con nosotros.</p>
+                          </div>
+                        )
+                      }
+
+                    </div>
+                  </div>
+                </form>
+              </div>
+            )
+          }
+          {
+            widthWindow < 768 && displayForm && (
               <div className={"d-lg-none contact-form-box__right"}>
 
                 <form onSubmit={(e) => handleSubmit(e)}>
