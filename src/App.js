@@ -158,10 +158,10 @@ function App() {
           setLoad(false)
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
-          if(captcha.current) captcha.current.reset()
-          if(captchaFW.current) captchaFW.current.reset()
-          if(checkboxForm) checkboxForm.checked = false
-          if(checkboxFormFW) checkboxFormFW.checked = false
+          if (captcha.current) captcha.current.reset()
+          if (captchaFW.current) captchaFW.current.reset()
+          if (checkboxForm) checkboxForm.checked = false
+          if (checkboxFormFW) checkboxFormFW.checked = false
           setModalMessage("Las consulta de la matricula no devolvió resulltados")
           showmodal()
           return
@@ -173,10 +173,10 @@ function App() {
           setLoad(false)
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
           setFeatures([])
-          if(captcha.current) captcha.current.reset()
-          if(captchaFW.current) captchaFW.current.reset()
-          if(checkboxForm) checkboxForm.checked = false
-          if(checkboxFormFW) checkboxFormFW.checked = false
+          if (captcha.current) captcha.current.reset()
+          if (captchaFW.current) captchaFW.current.reset()
+          if (checkboxForm) checkboxForm.checked = false
+          if (checkboxFormFW) checkboxFormFW.checked = false
           setModalMessage("Hubo un error al devolver la información")
           showmodal()
           return
@@ -202,17 +202,17 @@ function App() {
           setModalMessage("Hubo un error al devolver los resultados")
           showmodal()
           setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
-          if(captcha.current) captcha.current.reset()
-          if(captchaFW.current) captchaFW.current.reset()
-          if(checkboxForm) checkboxForm.checked = false
-          if(checkboxFormFW) checkboxFormFW.checked = false
+          if (captcha.current) captcha.current.reset()
+          if (captchaFW.current) captchaFW.current.reset()
+          if (checkboxForm) checkboxForm.checked = false
+          if (checkboxFormFW) checkboxFormFW.checked = false
         } else {
           // console.log(obtainM2value)
           if (obtainM2value.data.features.length >= 2) {
-            if(captcha.current) captcha.current.reset()
-            if(captchaFW.current) captchaFW.current.reset()
-            if(checkboxForm) checkboxForm.checked = false
-            if(checkboxFormFW) checkboxFormFW.checked = false
+            if (captcha.current) captcha.current.reset()
+            if (captchaFW.current) captchaFW.current.reset()
+            if (checkboxForm) checkboxForm.checked = false
+            if (checkboxFormFW) checkboxFormFW.checked = false
             setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
             showmodal()
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
@@ -220,10 +220,10 @@ function App() {
             setLoad(false)
           } else {
             // if (widthWindow < 768) scroll.scrollToBottom()
-            if(captcha.current) captcha.current.reset()
-            if(captchaFW.current) captchaFW.current.reset()
-            if(checkboxForm) checkboxForm.checked = false
-            if(checkboxFormFW) checkboxFormFW.checked = false
+            if (captcha.current) captcha.current.reset()
+            if (captchaFW.current) captchaFW.current.reset()
+            if (checkboxForm) checkboxForm.checked = false
+            if (checkboxFormFW) checkboxFormFW.checked = false
             setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone, matricula: formData.matricula, metros: formData.metros })
             setFeatures(obtainM2value.data.features)
             handlerDisplayModal()
@@ -236,10 +236,10 @@ function App() {
         setModalMessage("La consulta no puede mostrar los resultados por favor contactese con nosotros.")
         showmodal()
         setFormData({ ...defaultData, fullname: formData.fullname, email: formData.email, phone: formData.phone })
-        if(captcha.current) captcha.current.reset()
-        if(captchaFW.current) captchaFW.current.reset()
-        if(checkboxForm) checkboxForm.checked = false
-        if(checkboxFormFW) checkboxFormFW.checked = false
+        if (captcha.current) captcha.current.reset()
+        if (captchaFW.current) captchaFW.current.reset()
+        if (checkboxForm) checkboxForm.checked = false
+        if (checkboxFormFW) checkboxFormFW.checked = false
       }
 
     } catch (error) {
@@ -248,10 +248,10 @@ function App() {
       setFormData(defaultData)
       setModalMessage("Hubo un error al traer la consulta, por favor contactese con nosotros.")
       showmodal()
-      if(captcha.current) captcha.current.reset()
-      if(captchaFW.current) captchaFW.current.reset()
-      if(checkboxForm) checkboxForm.checked = false
-      if(checkboxFormFW) checkboxFormFW.checked = false
+      if (captcha.current) captcha.current.reset()
+      if (captchaFW.current) captchaFW.current.reset()
+      if (checkboxForm) checkboxForm.checked = false
+      if (checkboxFormFW) checkboxFormFW.checked = false
     }
   }
 
@@ -581,9 +581,6 @@ function App() {
                   widthWindow < 768 && !displayForm &&
                   (
                     <>
-                      <div>
-                        <button className='btn btn-back' onClick={() => handlerDisplayModal()}>Volver</button>
-                      </div>
                       <div className="contact-form-box__left" id='containerFormData'>
                         <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                         <ul className="list-group list-group-flush list-simulador mb-4">
@@ -616,6 +613,9 @@ function App() {
 
                         </ul>
 
+                      </div>
+                      <div className="col-12 p-0 mb-5 d-flex justify-content-center">
+                        <button onClick={() => handlerDisplayModal()} type='button' className="btn btn-green rounded-pill py-3 px-5 mt-4">Volver</button>
                       </div>
                     </>
                   )
