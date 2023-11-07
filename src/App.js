@@ -541,7 +541,7 @@ function App() {
               <React.Fragment key={index}>
                 {
                   widthWindow > 768 && (
-                    <div className="d-sm-none d-lg-block contact-form-box__left" id='containerFormData'>
+                    <div className="contact-form-box__left" id='containerFormData'>
                       <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                       <ul className="list-group list-group-flush list-simulador mb-4">
                         <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
@@ -581,9 +581,9 @@ function App() {
                   (
                     <>
                       <div>
-                        <button className='btn btn-back d-sm-block d-lg-none' onClick={() => handlerDisplayModal()}>Volver</button>
+                        <button className='btn btn-back' onClick={() => handlerDisplayModal()}>Volver</button>
                       </div>
-                      <div className="d-sm-block d-lg-none contact-form-box__left" id='containerFormData'>
+                      <div className="contact-form-box__left" id='containerFormData'>
                         <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                         <ul className="list-group list-group-flush list-simulador mb-4">
                           <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
@@ -626,7 +626,7 @@ function App() {
           }
 
           {
-            features.length >= 2 && (
+             widthWindow > 768 && features.length >= 2 && (
               <>
                 <div className="d-sm-none d-lg-block contact-form-box__left">
                   <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
