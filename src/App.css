@@ -1176,6 +1176,14 @@ label {
 
   }
 
+  .list-group-flush > .list-group-item {
+    padding: 7px 1px;
+  }
+  
+  .contact-form-box__left h5 {
+    padding-top: 5px;
+  }
+
 }
 
 

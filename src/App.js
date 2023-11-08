@@ -387,7 +387,7 @@ function App() {
                       <div className="col-12">
                         <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
                         <hr />
-                        <p>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
+                        <p className='d-sm-none d-md-block'>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
                       </div>
                       <div className="col-12 col-md-6 mb-4">
                         <div className="floating-label-wrap ">
@@ -497,7 +497,7 @@ function App() {
 
           {
             widthWindow > 768 && features.length === 0 && (
-              <div className="d-sm-none d-lg-block contact-form-box__left">
+              <div className="d-sm-none d-md-block contact-form-box__left">
                 <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                 <ul className="list-group list-group-flush list-simulador mb-4">
                   <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
