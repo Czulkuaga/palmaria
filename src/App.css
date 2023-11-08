@@ -1569,3 +1569,17 @@ p {
   -webkit-transform: scale(1);
   transform: scale(0.9);
 }
+
+@media (max-width: 575px) {
+  .subtitle-form{
+    display: none !important;
+  }
+
+  .list-group-flush > .list-group-item {
+    padding: 7px 1px;
+  }
+  
+  .contact-form-box__left h5 {
+    padding-top: 5px;
+  }
+}

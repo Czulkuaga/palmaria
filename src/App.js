@@ -387,7 +387,7 @@ function App() {
                       <div className="col-12">
                         <h3 className="text-blue">Simulador de pago para obligaciones urbanísticas</h3>
                         <hr />
-                        <p className='d-sm-none d-md-block'>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
+                        <p className='subtitle-form d-sm-none d-md-block'>Aquí podrás conocer en detalle la información correspondiente para tus obligaciones urbanísticas pendientes con el municipio de medellín.</p>
                       </div>
                       <div className="col-12 col-md-6 mb-4">
                         <div className="floating-label-wrap ">
