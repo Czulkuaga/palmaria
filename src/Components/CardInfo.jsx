@@ -89,12 +89,14 @@ const CardInfo = () => {
     const postData = async (formData) => {
         try {
             const obtainCBL = await ApiService.obtainCBL(OBTAIN_CBL_API_URL, formData.matricula)
+            console.log(obtainCBL)
             if (obtainCBL.code !== '200') {
                 setLoad(false)
                 setFormData(defaultData)
                 return
             }
             const obtainPOT48Data = await ApiService.obtainPOT48Data(obtainCBL.data.cbml)
+            console.log(obtainPOT48Data)
             if (obtainPOT48Data.code !== '200') {
                 setLoad(false)
                 setFormData(defaultData)
@@ -112,7 +114,7 @@ const CardInfo = () => {
 
             const obtainM2value = await ApiService.obtainValueM2(xmin, ymin, xmax, ymax, spartialReference)
 
-            // console.log(obtainM2value)
+            console.log(obtainM2value)
             setFeatures(obtainM2value.data.features)
             setLoad(false)
         } catch (error) {
@@ -175,10 +177,10 @@ const CardInfo = () => {
                             </div>
                             <div className="card-body">
                                 <p>Comuna: {feature.attributes.COMUNA}</p>
-                                <p>Valor M2: $ {addDotThousands(feature.attributes.VALOR_M2)}</p>
+                                <p>Valor M2: $ {addDotThousands(feature.attributes.valor_m2)}</p>
                                 <p>Vigencia: {feature.attributes.VIGENCIA}</p>
-                                <p>Valor Consultado: $ {addDotThousands(feature.attributes.VALOR_M2 * parseInt(formData.metros))}</p>
-                                <p>Valor a pagar: $ {addDotThousands(parseInt((feature.attributes.VALOR_M2 * parseInt(formData.metros))*1.15))}</p>
+                                <p>Valor Consultado: $ {addDotThousands(feature.attributes.valor_m2 * parseInt(formData.metros))}</p>
+                                <p>Valor a pagar: $ {addDotThousands(parseInt((feature.attributes.valor_m2 * parseInt(formData.metros))*1.15))}</p>
                             </div>
                         </div>
                     ))
