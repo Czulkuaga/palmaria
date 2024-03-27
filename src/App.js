@@ -507,7 +507,7 @@ function App() {
                     {
                         widthWindow > 768 && features.length === 0 && (
                             <div className="d-sm-none d-md-block contact-form-box__left">
-                                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                     <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
                                     <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
@@ -519,7 +519,7 @@ function App() {
                                 </ul>
 
 
-                                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                     <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
                                     <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
@@ -529,7 +529,7 @@ function App() {
                                 </ul>
 
 
-                                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                     <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
                                     <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
@@ -591,7 +591,7 @@ function App() {
                                     (
                                         <>
                                             <div className="contact-form-box__left" id='containerFormData'>
-                                                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                                                <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                                     <li className="list-group-item">Matricula<span className="float-end"><strong>{formData.matricula}</strong></span></li>
                                                     <li className="list-group-item">Comuna<span className="float-end"><strong>{feature.attributes.COMUNA}</strong></span></li>
@@ -603,7 +603,7 @@ function App() {
                                                 </ul>
 
 
-                                                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                                                <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
                                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                                     <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$ {addDotThousands((feature.attributes.valor_m2 * parseFloat(formData.metros)).toFixed(2))}</strong></span></li>
                                                     <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
@@ -612,7 +612,7 @@ function App() {
                                                 </ul>
 
 
-                                                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                                                <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
                                                 <ul className="list-group list-group-flush list-simulador mb-4">
                                                     <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$ {addDotThousands((((parseInt(feature.attributes.valor_m2) * parseFloat(formData.metros)) + (parseInt(feature.attributes.valor_m2) * parseFloat(formData.metros) * 0.15))).toFixed(2))}</strong></span></li>
                                                     <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
@@ -640,7 +640,7 @@ function App() {
                         widthWindow > 768 && features.length >= 2 && (
                             <>
                                 <div className="d-sm-none d-lg-block contact-form-box__left">
-                                    <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
+                                    <h5 className="text-blue"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Calculo de obligación </h5>
                                     <ul className="list-group list-group-flush list-simulador mb-4">
                                         <li className="list-group-item">Matricula<span className="float-end"><strong>0</strong></span></li>
                                         <li className="list-group-item">Comuna <span className="float-end"><strong>0</strong></span></li>
@@ -652,7 +652,7 @@ function App() {
                                     </ul>
 
 
-                                    <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
+                                    <h5 className="text-blue"><img style={{ width: "25px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-2.svg" alt="Icon" />Si pagas en efectivo </h5>
                                     <ul className="list-group list-group-flush list-simulador mb-4">
                                         <li className="list-group-item">Total obligaciones <span className="float-end"><strong>$0</strong></span></li>
                                         <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong>+15%</strong></span></li>
@@ -662,7 +662,7 @@ function App() {
                                     </ul>
 
 
-                                    <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://aliatic.com.co/wp-content/uploads/2023/10/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
+                                    <h5 className="text-success"><img style={{ width: "20px", marginRight: "10px" }} src="https://obligacionesurbanisticas.co/wp-content/uploads/2024/03/icon-simulador-1.svg" alt="Icon" />Si pagas con palmaria</h5>
                                     <ul className="list-group list-group-flush list-simulador mb-4">
                                         <li className="list-group-item">Total obligaciones<span className="float-end"><strong>$0</strong></span></li>
                                         <li className="list-group-item">Recargo si pagas en efectivo <span className="float-end"><strong className="text-success">-15%</strong></span></li>
